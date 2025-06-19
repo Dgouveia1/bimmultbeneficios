@@ -211,6 +211,7 @@
                         <div class="table-container">
                             <table>
                                 <thead>
+<<<<<<< HEAD
                                     <tr>
                                         <th>Carteirinha</th>
                                         <th>Nome</th>
@@ -220,6 +221,9 @@
                                         <th>Status</th>
                                         <th>Ações</th>
                                     </tr>
+=======
+                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
+>>>>>>> 4984c10bfb288970750bb1ca5e675b1ad3be78d1
                                 </thead>
                                 <tbody id="clientsTableBody"></tbody>
                             </table>
@@ -263,18 +267,7 @@
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr>
-                                        <th>Código</th>
-                                        <th>Descrição</th>
-                                        <th>Un.</th>
-                                        <th>Grupo</th>
-                                        <th>Tabela</th>
-                                        <th>Preço</th>
-                                        <th>Custo</th>
-                                        <th>Margem</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
-                                    </tr>
+                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="productsTableBody"></tbody>
                             </table>
@@ -351,16 +344,7 @@
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>Cliente</th>
-                                        <th>Descrição</th>
-                                        <th>Tipo</th>
-                                        <th>Valor</th>
-                                        <th>Status</th>
-                                        <th>Vencimento</th>
-                                        <th>Ações</th>
-                                    </tr>
+                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="financeTableBody"></tbody>
                             </table>
@@ -542,12 +526,7 @@
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                            </tr>
+                            <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
                         </thead>
                         <tbody>
                             <tr>
@@ -683,6 +662,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Modal Add Client -->
     <div class="modal" id="newClientModal">
         <div class="modal-content">
@@ -793,5 +773,116 @@
     </div>
 
     <script src="js/script.js"></script>
+=======
+    
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // LOGIN + FETCH CLIENTS
+    const loginForm = document.getElementById('loginForm');
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboard = document.getElementById('dashboard');
+    const clientsTableBody = document.getElementById('clientsTableBody');
+    let clientsData = [];
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'admin') {
+                loginScreen.style.display = 'none';
+                dashboard.style.display = 'block';
+                await fetchClientsData();
+                populateClientsTable();
+            } else {
+                alert('Usuário ou senha incorretos.');
+            }
+        });
+    }
+
+    async function fetchClientsData() {
+        try {
+            const response = await fetch('https://webhook.ia-tess.com.br/webhook/d5408cf6-3ae5-4e2f-bdb3-bee8882e704d');
+            if (response.ok) {
+                clientsData = await response.json();
+            } else {
+                console.error('Erro ao buscar clientes. Status:', response.status);
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    }
+
+    function populateClientsTable() {
+        clientsTableBody.innerHTML = '';
+        clientsData.forEach(client => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${client.Carteirinha}</td>
+                <td>${client.Nome}</td>
+                <td>${client.CPF}</td>
+                <td>${client.Telefone}</td>
+                <td>${client.Plano ?? 'N/A'}</td>
+                <td>${client.Status ?? 'N/A'}</td>
+                <td>
+                    <button class="action-btn action-card" data-id="${client.Carteirinha}">Ver Carteira</button>
+                </td>
+            `;
+            clientsTableBody.appendChild(row);
+        });
+    }
+
+    // PAGE NAVIGATION
+    const pageContents = document.querySelectorAll('.page-content');
+    const menuItems = document.querySelectorAll('.menu-item[data-page]');
+    const submenuItems = document.querySelectorAll('.submenu-item');
+    const cartaoBim = document.getElementById('cartaoBim');
+    const cartaoSubmenu = document.getElementById('cartaoSubmenu');
+
+    function showPage(pageId) {
+        pageContents.forEach(page => page.classList.remove('active'));
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) targetPage.classList.add('active');
+    }
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            const targetPage = this.getAttribute('data-page') + 'Page';
+            showPage(targetPage);
+        });
+    });
+
+    submenuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            submenuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            const targetPage = this.getAttribute('data-page') + 'Page';
+            showPage(targetPage);
+        });
+    });
+
+    if (cartaoBim && cartaoSubmenu) {
+        cartaoBim.addEventListener('click', function() {
+            cartaoSubmenu.classList.toggle('active');
+        });
+    }
+});
+</script>
+
+>>>>>>> 4984c10bfb288970750bb1ca5e675b1ad3be78d1
 </body>
 </html>
