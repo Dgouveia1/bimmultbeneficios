@@ -28,8 +28,13 @@ async function loadClientsData() {
         });
 
         if (response.ok) {
-            clientsData = await response.json();
-            populateClientsTable();
+            const newData = await response.json();
+            // Compare newData with clientsData
+            const isDifferent = JSON.stringify(newData) !== JSON.stringify(clientsData);
+            if (isDifferent) {
+                clientsData = newData;
+                populateClientsTable();
+            }
         } else {
             console.error('Erro ao carregar clientes:', response.statusText);
         }
@@ -37,6 +42,13 @@ async function loadClientsData() {
         console.error('Falha na requisição do webhook:', error);
     }
 }
+
+function startClientsPolling() {
+    setInterval(() => {
+        loadClientsData();
+    }, 1000); // every 1 seconds
+}
+
 
 
         // Sample data for products
@@ -119,9 +131,9 @@ async function loadClientsData() {
         const pageContents = document.querySelectorAll('.page-content');
         
         // Modal elements
-        const editClientModal = document.getElementById('editClientModal');
-        const closeEditClientModal = document.getElementById('closeEditClientModal');
-        const cancelEditClient = document.getElementById('cancelEditClient');
+        // const editClientModal = document.getElementById('editClientModal');
+        // const closeEditClientModal = document.getElementById('closeEditClientModal');
+        // const cancelEditClient = document.getElementById('cancelEditClient');
         const financeModal = document.getElementById('financeModal');
         const closeFinanceModal = document.getElementById('closeFinanceModal');
         const cardModal = document.getElementById('cardModal');
@@ -195,14 +207,15 @@ async function loadClientsData() {
 
         
         // Initialize dashboard
-        function initializeDashboard() {
-            loadClientsData();  // Agora busca clientes do Webhook
-            populateProductsTable();
-            populateFinanceTable();
-            populateKanbanBoard();
-            generateCalendar();
-            populateAgendaEvents();
-        }
+function initializeDashboard() {
+    loadClientsData();  // Agora busca clientes do Webhook
+    startClientsPolling(); // Start polling for real-time updates
+    populateProductsTable();
+    populateFinanceTable();
+    populateKanbanBoard();
+    generateCalendar();
+    populateAgendaEvents();
+}
 
  
         
@@ -902,10 +915,10 @@ function populateClientsTable(data = clientsData) {
             document.getElementById('status').value = 'active';
             
             // Change modal title
-            document.querySelector('#editClientModal .modal-title').textContent = 'Adicionar Novo Cliente';
+            // document.querySelector('#editClientModal .modal-title').textContent = 'Adicionar Novo Cliente';
             
             // Show modal
-            editClientModal.style.display = 'flex';
+            // editClientModal.style.display = 'flex';
         });
         
         // Add new product
@@ -1161,10 +1174,46 @@ function populateClientsTable(data = clientsData) {
             }
         }
 
+        // CPF validation function
+        function validateCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+                return false;
+            }
+            let sum = 0;
+            let remainder;
+
+            for (let i = 1; i <= 9; i++) {
+                sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            }
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+
+            sum = 0;
+            for (let i = 1; i <= 10; i++) {
+                sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            }
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+
+            return true;
+        }
+
         // Envio do formulário de novo cliente
         if (newClientForm) {
             newClientForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
+
+                const cpfInput = document.getElementById('cpf');
+                const cpfValue = cpfInput ? cpfInput.value : '';
+
+                if (!validateCPF(cpfValue)) {
+                    alert('CPF inválido. Por favor, insira um CPF válido.');
+                    cpfInput.focus();
+                    return;
+                }
 
                 const titular = {};              // Aqui ficam os dados do cliente principal
                 const dependentes = [];          // Aqui vai o array de dependentes
@@ -1208,15 +1257,32 @@ function populateClientsTable(data = clientsData) {
                         body: JSON.stringify(payload)
                     });
 
-                    if (response.ok) {
-                        alert('Novo cliente salvo com sucesso!');
-                        newClientModal.style.display = 'none';
-                        newClientForm.reset();
-                        dependentesContainer.innerHTML = '';
-                        dependenteCount = 0;
-                    } else {
-                        alert('Erro ao salvar cliente.');
-                    }
+                if (response.ok) {
+                    alert('Novo cliente salvo com sucesso!');
+                    // Add the new client to clientsData to update the table
+                    const newClientId = clientsData.length > 0 ? Math.max(...clientsData.map(c => c.id)) + 1 : 1;
+                    const newClient = {
+                        id: newClientId,
+                        originId: titular.originId || '',
+                        socialName: titular.socialName || '',
+                        fantasyName: titular.fantasyName || '',
+                        cpf: titular.cpf || '',
+                        city: titular.city || '',
+                        state: titular.state || '',
+                        phone: titular.phone || '',
+                        email: titular.email || '',
+                        status: titular.status || 'active'
+                    };
+                    clientsData.push(newClient);
+                    populateClientsTable();
+
+                    newClientModal.style.display = 'none';
+                    newClientForm.reset();
+                    dependentesContainer.innerHTML = '';
+                    dependenteCount = 0;
+                } else {
+                    alert('Erro ao salvar cliente.');
+                }
                 } catch (error) {
                     console.error('Erro ao salvar:', error);
                     alert('Erro na comunicação com o servidor.');
