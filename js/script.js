@@ -1,6 +1,21 @@
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('loggedIn');
+
+            if (isLoggedIn === 'true') {
+                console.log('Usuário já está logado');
+                loginScreen.style.display = 'none';
+                dashboard.style.display = 'flex';
+                initializeDashboard();
+            } else {
+                console.log('Usuário precisa fazer login');
+                loginScreen.style.display = 'flex';
+                dashboard.style.display = 'none';
+            }
+        });
+
 
         // Sample data for clients
-let clientsData = [];
+        let clientsData = [];
 
 async function loadClientsData() {
     try {
@@ -97,6 +112,7 @@ async function loadClientsData() {
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const cartaoBim = document.getElementById('cartaoBim');
+        const ferramentasSubmenu = document.getElementById('ferramentasSubmenu');
         const cartaoSubmenu = document.getElementById('cartaoSubmenu');
         const menuItems = document.querySelectorAll('.menu-item[data-page]');
         const submenuItems = document.querySelectorAll('.submenu-item');
@@ -163,15 +179,20 @@ async function loadClientsData() {
             
             console.log('Tentativa de login:', username, password); // Debug
             
-            if (username === 'admin' && password === 'admin') {
+            if (username == 'admin' && password === 'admin') {
                 console.log('Login bem-sucedido!'); // Debug
+                
+                // Salva no LocalStorage que o usuário está logado
+                localStorage.setItem('loggedIn', 'true');
+                
                 loginScreen.style.display = 'none';
-                dashboard.style.display = 'block';
+                dashboard.style.display = 'flex';
                 initializeDashboard();
             } else {
                 alert('Credenciais inválidas! Use: admin / admin');
             }
         });
+
         
         // Initialize dashboard
         function initializeDashboard() {
@@ -1211,7 +1232,21 @@ function populateClientsTable(data = clientsData) {
             if (cartaoSubmenu) {
                 cartaoSubmenu.classList.add('active');
             }
+
+             if (clinicaSubmenu) {
+                clinicaSubmenu.classList.add('active');
+            }
+
+             if (ferramentasSubmenu) {
+                ferramentasSubmenu.classList.add('active');
+            }
             
             // Set today's date for agenda
             selectedDate = new Date();
         })
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            loginScreen.style.display = 'flex';
+            dashboard.style.display = 'none';
+        }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultSaude - Cartão Bim</title>
+    <title>Bim Beneficios - Sistema interno</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="CSS/style.css">
 </head>
@@ -14,7 +14,7 @@
             <div class="login-logo">
                 <i class="fas fa-heartbeat"></i>
             </div>
-            <h1 class="login-title">MultSaúde</h1>
+            <h1 class="login-title">Bim Beneficios</h1>
             
             <form id="loginForm">
                 <div class="input-group">
@@ -29,9 +29,6 @@
                 
                 <button type="submit" class="login-btn">Entrar</button>
                 
-                <div class="login-info">
-                    <p>Usuário: admin | Senha: admin</p>
-                </div>
             </form>
         </div>
     </div>
@@ -50,13 +47,13 @@
             <!-- Sidebar -->
             <div class="sidebar" id="sidebar">
                 <div class="logo-container">
-                    <div class="logo-text">MultSaude</div>
-                    <div class="logo-subtitle">Cartão Bim</div>
+                    <div class="logo-text">Bim Beneficios</div>
+                    <div class="logo-subtitle">Sistema interno</div>
                 </div>
                 
-                <div class="menu-section">Dashboard</div>
+                <div class="menu-section">Home</div>
                 <div class="menu-item active" data-page="home">
-                    <i class="fas fa-home"></i> Home
+                    <i class="fas fa-home"></i> Dashboard
                 </div>
                 
                 <div class="menu-section">Cartão Bim</div>
@@ -71,9 +68,27 @@
                 
                 <div class="menu-section">Clínica Bim</div>
                 <div class="menu-item">
-                    <i class="fas fa-hospital"></i> Clínica Bim
+                    <i class="fas fa-id-card"></i> Clínica Bim
                 </div>
-            </div>
+                <div class="submenu" id="clinicaSubmenu">
+                    <a href="#" class="submenu-item" data-page="agenda">Agenda</a>
+                    <a href="#" class="submenu-item" data-page="pacientes">Pacientes</a>
+                    <a href="#" class="submenu-item" data-page="laboratorio">Laboratorio</a>
+                </div>
+
+                    <div class="menu-section">Marketing</div>
+                <div class="menu-item">
+                    <i class="fas fa-id-card"></i> Marketing
+                </div>
+                <div class="submenu" id="ferramentasSubmenu">
+                    <a href="#" class="submenu-item" data-page="disparos">Disparos</a>
+                    <a href="#" class="submenu-item" data-page="pacientes">WhatsApp</a>
+                </div>
+
+                <div class="sidebar-footer">
+                    <button class="btn btn-logout" onclick="logout()">Sair</button>
+                    </div>
+                </div>
 
             <!-- Main Content -->
             <div class="main-content" id="mainContent">
@@ -650,7 +665,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
     <!-- Modal Add Client -->
     <div class="modal" id="newClientModal">
         <div class="modal-content">
@@ -761,7 +775,6 @@
     </div>
 
     <script src="js/script.js"></script>
-=======
     
 
 
@@ -871,6 +884,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
->>>>>>> 4984c10bfb288970750bb1ca5e675b1ad3be78d1
 </body>
 </html>
