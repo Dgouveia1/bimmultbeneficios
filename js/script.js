@@ -182,6 +182,8 @@ function startClientsPolling() {
         const categoryFilter = document.getElementById('categoryFilter');
         const financeFilter = document.getElementById('financeFilter');
         const statusFilter = document.getElementById('statusFilter');
+
+        document.querySelector('#clientesPage .btn-outline').addEventListener('click', exportClientsToCSV);
         
         // Login functionality
         loginForm.addEventListener('submit', function(e) {
