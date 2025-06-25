@@ -259,19 +259,18 @@
                             <option value="active">Produtos Ativos</option>
                             <option value="inactive">Produtos Inativos</option>
                         </select>
-                        <select class="filter-select" id="categoryFilter">
-                            <option value="all">Todas as Categorias</option>
-                            <option value="funeral">Funeral</option>
-                            <option value="plano">Planos</option>
-                            <option value="tele">Telemedicina</option>
-                        </select>
                     </div>
                     
                     <div class="card">
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Produto</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="productsTableBody"></tbody>
                             </table>
@@ -306,7 +305,14 @@
                             <option value="F">Feminino</option>
                         </select>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="sexoDisparo">Status</label>
+                        <select id="sexoDisparo" class="filter-select">
+                            <option value="ambos">Ambos</option>
+                            <option value="M">Ativo</option>
+                            <option value="F">Inativo</option>
+                        </select>
+                    </div>                    
                     <div class="form-group">
                         <label for="cidadeDisparo">Cidade</label>
                         <select id="cidadeDisparo" class="filter-select">

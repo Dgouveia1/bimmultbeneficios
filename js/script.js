@@ -19,7 +19,7 @@
 
 async function loadClientsData() {
     try {
-        const response = await fetch('https://webhook.ia-tess.com.br/webhook/d5408cf6-3ae5-4e2f-bdb3-bee8882e704d', {
+        const response = await fetch('https://webhook.ia-tess.com.br/webhook/carga-clientes', {
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json'
@@ -46,23 +46,46 @@ async function loadClientsData() {
 function startClientsPolling() {
     setInterval(() => {
         loadClientsData();
-    }, 1000); // every 1 seconds
+    }, 10000); // CADA 10 SEGUNDOS
 }
 
 
 
+
+
         // Sample data for products
-        const productsData = [
-            { code: 10000, name: 'MULT FUNERAL FAMILIAR ESTENDIDO', unit: 'UN', grupo: '10 - SELO', table: '100', price: 34.60, cost: 9.36, status: 'active', category: 'funeral', description: 'Plano funeral completo para toda a família' },
-            { code: 10003, name: 'MULT FUNERAL', unit: 'UN', grupo: '10 - SELO', table: '100', price: 16.80, cost: 6.90, status: 'active', category: 'funeral', description: 'Plano funeral básico' },
-            { code: 10004, name: 'MULT FUNERAL 70+', unit: 'UN', grupo: '10 - SELO', table: '100', price: 13.00, cost: 0.00, status: 'inactive', category: 'funeral', description: 'Plano funeral para idosos acima de 70 anos' },
-            { code: 10006, name: 'MULT TELE - ESPECIALIDADES + PSICÓLOGO', unit: 'UN', grupo: '11 - PLANO', table: '100', price: 65.60, cost: 23.24, status: 'active', category: 'tele', description: 'Telemedicina com especialidades e psicólogo' },
-            { code: 10033, name: 'CLUB MULT', unit: 'Combo', grupo: '11 - PLANO', table: '100', price: 16.25, cost: 4.05, status: 'active', category: 'plano', description: 'Clube de benefícios MultSaúde' },
-            { code: 10035, name: 'MULT FUNERAL COM SEGURO', unit: 'Combo', grupo: '11 - PLANO', table: '100', price: 36.30, cost: 20.68, status: 'inactive', category: 'funeral', description: 'Plano funeral com seguro de vida' },
-            { code: 10036, name: 'PLANO PREMIUM', unit: 'Combo', grupo: '11 - PLANO', table: '100', price: 56.50, cost: 27.39, status: 'active', category: 'plano', description: 'Plano premium com todos os benefícios' },
-            { code: 10038, name: 'PLANO ESSENCIAL', unit: 'Combo', grupo: '11 - PLANO', table: '100', price: 33.00, cost: 14.79, status: 'active', category: 'plano', description: 'Plano essencial com benefícios básicos' },
-            { code: 10050, name: 'MULT FUNERAL FAMILIAR ESTENDIDO DEPENDENTE', unit: 'UN', grupo: '10 - SELO', table: '100', price: 0.00, cost: 0.00, status: 'active', category: 'funeral', description: 'Extensão para dependentes do plano funeral familiar' }
-        ];
+        let productsData = [];
+const productsWebhookUrl = 'https://webhook.ia-tess.com.br/webhook/d5408cf6-3ae5-4e2f-bdb3-bee8882e704d'; // URL do seu webhook para produtos
+
+// Função para carregar dados de produtos
+async function loadProductsData() {
+    try {
+        const response = await fetch(productsWebhookUrl, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            const newData = await response.json();
+            const isDifferent = JSON.stringify(newData) !== JSON.stringify(productsData);
+            if (isDifferent) {
+                productsData = newData;
+                populateProductsTable();
+            }
+        } else {
+            console.error('Erro ao carregar produtos:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Falha na requisição do webhook:', error);
+    }
+}
+
+// Polling para produtos (1 minuto)
+function startProductsPolling() {
+    setInterval(() => {
+        loadProductsData();
+    }, 10000); // 10 segundos
+}
 
         // Sample data for finance
         const financeData = [
@@ -210,8 +233,9 @@ function startClientsPolling() {
         
         // Initialize dashboard
         function initializeDashboard() {
-            loadClientsData();  // Agora busca clientes do Webhook
+            loadClientsData();  // clientes do Webhook
             startClientsPolling(); // Start polling for real-time updates
+            loadProductsData(); 
             populateProductsTable();
             populateFinanceTable();
             populateKanbanBoard();
@@ -219,8 +243,11 @@ function startClientsPolling() {
             populateAgendaEvents();
         }
 
- 
         
+                // Dentro da função initializeDashboard ou similar:
+        if (productSearch) productSearch.addEventListener('input', filterProducts);
+        if (productFilter) productFilter.addEventListener('change', filterProducts);
+
         // Mobile menu toggle
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
@@ -353,24 +380,22 @@ function populateClientsTable(data = clientsData) {
             if (!productsTableBody) return;
             
             productsTableBody.innerHTML = '';
+            
             data.forEach(product => {
-                const margin = product.price > 0 ? (((product.price - product.cost) / product.price) * 100).toFixed(1) : '0.0';
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${product.code}</td>
-                    <td>${product.name}</td>
-                    <td>${product.unit}</td>
-                    <td>${product.grupo}</td>
-                    <td>${product.table}</td>
-                    <td>R$ ${product.price.toFixed(2)}</td>
-                    <td>R$ ${product.cost.toFixed(2)}</td>
-                    <td>${margin}%</td>
-                    <td><span class="status ${product.status === 'active' ? 'status-active' : 'status-inactive'}">${product.status === 'active' ? 'Ativo' : 'Inativo'}</span></td>
+                    <td>${product.id_produto}</td>
+                    <td>${product.nome_produto}</td>
+                    <td>
+                        <span class="status ${product.status === 'ATIVO' ? 'status-active' : 'status-inactive'}">
+                            ${product.status === 'ATIVO' ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </td>
                     <td class="actions">
-                        <button class="action-btn action-edit" data-id="${product.code}">
+                        <button class="action-btn action-edit" data-id="${product.id_produto}">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn action-delete" data-id="${product.code}">
+                        <button class="action-btn action-delete" data-id="${product.id_produto}">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -384,6 +409,7 @@ function populateClientsTable(data = clientsData) {
                     openEditProductModal(this.getAttribute('data-id'));
                 });
             });
+
             
             // Add event listeners to delete buttons
             document.querySelectorAll('#productsTableBody .action-delete').forEach(btn => {
@@ -671,17 +697,17 @@ function populateClientsTable(data = clientsData) {
             if (!productSearch || !productFilter) return;
             
             const searchTerm = productSearch.value.toLowerCase();
-            const statusFilter = productFilter.value;
-            const categoryFilterValue = categoryFilter ? categoryFilter.value : 'all';
+            const statusFilterValue = productFilter.value;
             
             const filteredData = productsData.filter(product => {
-                const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
-                                    product.code.toString().includes(searchTerm);
+                const matchesSearch = product.nome.toLowerCase().includes(searchTerm) || 
+                                    product.codigo.toLowerCase().includes(searchTerm);
                 
-                const matchesStatus = statusFilter === 'all' || product.status === statusFilter;
-                const matchesCategory = categoryFilterValue === 'all' || product.category === categoryFilterValue;
+                const matchesStatus = statusFilterValue === 'all' || 
+                                    (statusFilterValue === 'active' && product.status === 'ativo') ||
+                                    (statusFilterValue === 'inactive' && product.status === 'inativo');
                 
-                return matchesSearch && matchesStatus && matchesCategory;
+                return matchesSearch && matchesStatus;
             });
             
             populateProductsTable(filteredData);
@@ -1342,7 +1368,7 @@ function populateClientsTable(data = clientsData) {
                         mensagem
                     };
                     
-                    // URL fake para exemplo (substitua pelo seu webhook real)
+                    
                     const webhookUrl = 'https://auto.ia-tess.com.br/webhook-test/5869a4a5-2d6f-442d-a9f2-62a304c303ce';
                     
                     const response = await fetch(webhookUrl, {
