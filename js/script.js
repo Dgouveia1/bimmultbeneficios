@@ -178,7 +178,7 @@ function startClientsPolling() {
         
         // Filter selects
         const clientFilter = document.getElementById('clientFilter');
-        const productFilter = document.getElementById('productFilter');
+       const productFilter = document.getElementById('productFilter');
         const categoryFilter = document.getElementById('categoryFilter');
         const financeFilter = document.getElementById('financeFilter');
         const statusFilter = document.getElementById('statusFilter');
@@ -207,15 +207,15 @@ function startClientsPolling() {
 
         
         // Initialize dashboard
-function initializeDashboard() {
-    loadClientsData();  // Agora busca clientes do Webhook
-    startClientsPolling(); // Start polling for real-time updates
-    populateProductsTable();
-    populateFinanceTable();
-    populateKanbanBoard();
-    generateCalendar();
-    populateAgendaEvents();
-}
+        function initializeDashboard() {
+            loadClientsData();  // Agora busca clientes do Webhook
+            startClientsPolling(); // Start polling for real-time updates
+            populateProductsTable();
+            populateFinanceTable();
+            populateKanbanBoard();
+            generateCalendar();
+            populateAgendaEvents();
+        }
 
  
         
@@ -282,7 +282,7 @@ function initializeDashboard() {
         if (clientSearch) clientSearch.addEventListener('input', filterClients);
         if (clientFilter) clientFilter.addEventListener('change', filterClients);
         if (productSearch) productSearch.addEventListener('input', filterProducts);
-        if (productFilter) productFilter.addEventListener('change', filterProducts);
+        if (productFilter) productFilter.addEventListener('change', filterClients);
         if (categoryFilter) categoryFilter.addEventListener('change', filterProducts);
         if (financeSearch) financeSearch.addEventListener('input', filterFinance);
         if (financeFilter) financeFilter.addEventListener('change', filterFinance);
@@ -645,20 +645,21 @@ function populateClientsTable(data = clientsData) {
         
         // Filter functions
         function filterClients() {
-            if (!clientSearch || !clientFilter) return;
+            if (!clientSearch || !productFilter) return;
             
             const searchTerm = clientSearch.value.toLowerCase();
-            const statusFilter = clientFilter.value;
+            const productFilterValue = productFilter.value;
             
             const filteredData = clientsData.filter(client => {
-                const matchesSearch = client.socialName.toLowerCase().includes(searchTerm) ||
-                                    client.fantasyName.toLowerCase().includes(searchTerm) ||
-                                    client.cpf.includes(searchTerm) ||
-                                    client.city.toLowerCase().includes(searchTerm);
+                // Busca por Nome ou CPF
+                const matchesSearch = client.Nome.toLowerCase().includes(searchTerm) ||
+                                    client.CPF.toLowerCase().includes(searchTerm);
                 
-                const matchesStatus = statusFilter === 'all' || client.status === statusFilter;
+                // Filtro por produto (Mult/Bim)
+                const matchesProduct = productFilterValue === 'all' || 
+                                    (client.Plano && client.Plano.includes(productFilterValue));
                 
-                return matchesSearch && matchesStatus;
+                return matchesSearch && matchesProduct;
             });
             
             populateClientsTable(filteredData);
@@ -702,6 +703,28 @@ function populateClientsTable(data = clientsData) {
             });
             
             populateFinanceTable(filteredData);
+        }
+
+        function exportClientsToCSV() {
+            const headers = ["Carteirinha", "Nome", "CPF", "Telefone", "Plano", "Status"];
+            const csvContent = [
+                headers.join(","), // Cabeçalho
+                ...clientsData.map(client => 
+                    `"${client.Carteirinha}","${client.Nome}","${client.CPF}","${client.Telefone}","${client.Plano || ''}","${client.Status}"`
+                )
+            ].join("\n");
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", "clientes.csv");
+            link.style.visibility = "hidden";
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
         
         // Open edit client modal
