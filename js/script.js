@@ -1315,6 +1315,77 @@ function populateClientsTable(data = clientsData) {
             });
         }
 
+                // Disparos functionality
+        const disparosForm = document.getElementById('disparosForm');
+        const disparoResult = document.getElementById('disparoResult');
+        const disparoStatus = document.getElementById('disparoStatus');
+
+        if (disparosForm) {
+            disparosForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const plano = document.getElementById('planoDisparo').value;
+                const sexo = document.getElementById('sexoDisparo').value;
+                const cidade = document.getElementById('cidadeDisparo').value;
+                const mensagem = document.getElementById('mensagemDisparo').value;
+                
+                // Mostrar loading
+                disparoResult.style.display = 'block';
+                disparoStatus.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Enviando disparo...</p>';
+                
+                try {
+                    // Dados para enviar
+                    const payload = {
+                        plano,
+                        sexo,
+                        cidade,
+                        mensagem
+                    };
+                    
+                    // URL fake para exemplo (substitua pelo seu webhook real)
+                    const webhookUrl = 'https://auto.ia-tess.com.br/webhook-test/5869a4a5-2d6f-442d-a9f2-62a304c303ce';
+                    
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (response.ok) {
+                        disparoStatus.innerHTML = `
+                            <div style="background: var(--green-light); padding: 15px; border-radius: 8px;">
+                                <p style="color: var(--confirmed-color);">
+                                    <i class="fas fa-check-circle"></i> Disparo realizado com sucesso!
+                                </p>
+                                <p><strong>Detalhes:</strong></p>
+                                <ul>
+                                    <li><strong>Plano:</strong> ${plano}</li>
+                                    <li><strong>Sexo:</strong> ${sexo}</li>
+                                    <li><strong>Cidade:</strong> ${cidade}</li>
+                                    <li><strong>Mensagem:</strong> ${mensagem}</li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error('Erro na resposta do servidor');
+                    }
+                } catch (error) {
+                    disparoStatus.innerHTML = `
+                        <div style="background: var(--red-light); padding: 15px; border-radius: 8px;">
+                            <p style="color: var(--cancelled-color);">
+                                <i class="fas fa-exclamation-circle"></i> Erro ao enviar disparo: ${error.message}
+                            </p>
+                            <p>Por favor, tente novamente mais tarde.</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM carregado'); // Debug
