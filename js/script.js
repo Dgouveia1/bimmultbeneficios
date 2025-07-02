@@ -1369,7 +1369,7 @@ function populateClientsTable(data = clientsData) {
                     };
                     
                     
-                    const webhookUrl = 'https://auto.ia-tess.com.br/webhook-test/disparos';
+                    const webhookUrl = 'https://webhook.ia-tess.com.br/webhook/disparos';
                     
                     const response = await fetch(webhookUrl, {
                         method: 'POST',
