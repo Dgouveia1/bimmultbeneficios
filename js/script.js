@@ -1473,12 +1473,23 @@ if (printCarteirinhaBtn) {
 // Event delegation para os botões de ação na tabela de clientes
 if (clientsTableBody) {
     clientsTableBody.addEventListener('click', function(e) {
+        const editBtn = e.target.closest('.action-edit');
+        const financeBtn = e.target.closest('.action-finance');
         const cardBtn = e.target.closest('.action-card');
-        if (cardBtn) {
-            const row = cardBtn.closest('tr');
-            const nome = row.cells[1].textContent;
-            const cpf = row.cells[2].textContent;
-            openCarteirinhaModal(nome, cpf);
+        const row = e.target.closest('tr');
+        if (editBtn && row) {
+            const clientId = row.getAttribute('data-id') || row.cells[0]?.textContent;
+            openEditClientModal(clientId);
+        } else if (financeBtn && row) {
+            // Adicione aqui a lógica para abrir o modal financeiro se necessário
+        } else if (cardBtn && row) {
+            // Pega o id do cliente para buscar os dados corretos
+            const clientId = row.getAttribute('data-id') || row.cells[0]?.textContent;
+            // Busca o cliente pelo id
+            const client = clientsData.find(c => c.id == clientId);
+            if (client) {
+                openCarteirinhaModal(client.Nome, client.CPF);
+            }
         }
     });
 }
