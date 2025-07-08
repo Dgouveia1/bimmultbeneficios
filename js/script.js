@@ -159,8 +159,6 @@ function startProductsPolling() {
         // const cancelEditClient = document.getElementById('cancelEditClient');
         const financeModal = document.getElementById('financeModal');
         const closeFinanceModal = document.getElementById('closeFinanceModal');
-        const cardModal = document.getElementById('cardModal');
-        const closeCardModal = document.getElementById('closeCardModal');
         const editProductModal = document.getElementById('editProductModal');
         const closeEditProductModal = document.getElementById('closeEditProductModal');
         const cancelEditProduct = document.getElementById('cancelEditProduct');
@@ -370,7 +368,7 @@ function populateClientsTable(data = clientsData) {
             document.querySelectorAll('.action-card').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const clientId = this.getAttribute('data-id');
-                    openCardModal(clientId);
+                    openCarteirinhaModal(this.getAttribute('data-id'));
                 });
             });
         
@@ -791,13 +789,12 @@ function populateClientsTable(data = clientsData) {
         }
         
         // Open card modal
-        function openCardModal(clientId) {
+        function openCarteirinhaModal(clientId) {
             const client = clientsData.find(c => c.id == clientId);
             if (client) {
-                document.getElementById('cardUserName').textContent = client.socialName;
-                document.getElementById('cardUserCpf').textContent = `CPF: ${client.cpf}`;
-                document.getElementById('cardNumber').textContent = `MS-${client.id}-2025`;
-                cardModal.style.display = 'flex';
+                document.getElementById('carteirinhaTitularNome').textContent = 'Titular: ' + client.Nome;
+                document.getElementById('carteirinhaTitularCpf').textContent = 'CPF: ' + client.CPF;
+                document.getElementById('carteirinhaModal').style.display = 'flex';
             }
         }
         
@@ -805,7 +802,6 @@ function populateClientsTable(data = clientsData) {
         closeEditClientModal.addEventListener('click', () => editClientModal.style.display = 'none');
         cancelEditClient.addEventListener('click', () => editClientModal.style.display = 'none');
         closeFinanceModal.addEventListener('click', () => financeModal.style.display = 'none');
-        closeCardModal.addEventListener('click', () => cardModal.style.display = 'none');
         closeEditProductModal.addEventListener('click', () => editProductModal.style.display = 'none');
         cancelEditProduct.addEventListener('click', () => editProductModal.style.display = 'none');
         closeAddTaskModal.addEventListener('click', () => addTaskModal.style.display = 'none');
@@ -817,28 +813,9 @@ function populateClientsTable(data = clientsData) {
         window.addEventListener('click', (e) => {
             if (e.target === editClientModal) editClientModal.style.display = 'none';
             if (e.target === financeModal) financeModal.style.display = 'none';
-            if (e.target === cardModal) cardModal.style.display = 'none';
             if (e.target === editProductModal) editProductModal.style.display = 'none';
             if (e.target === addTaskModal) addTaskModal.style.display = 'none';
             if (e.target === newClientModal) newClientModal.style.display = 'none';
-        });
-        
-        // Print card button
-        document.getElementById('printCardBtn').addEventListener('click', () => {
-            window.print();
-        });
-        
-        // Share card button
-        document.getElementById('shareCardBtn').addEventListener('click', () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Carteirinha MultSaúde',
-                    text: 'Minha carteirinha MultSaúde',
-                    url: window.location.href
-                });
-            } else {
-                alert('Compartilhando carteirinha... Em um sistema real, isso permitiria enviar por WhatsApp ou email.');
-            }
         });
         
         // Save client
@@ -1438,3 +1415,79 @@ function populateClientsTable(data = clientsData) {
             loginScreen.style.display = 'flex';
             dashboard.style.display = 'none';
         }
+
+// Função unificada para abrir o modal de carteirinha
+function openCarteirinhaModal(nome, cpf) {
+    const modal = document.getElementById('carteirinhaModal');
+    const nomeEl = document.getElementById('carteirinhaTitularNome');
+    const cpfEl = document.getElementById('carteirinhaTitularCpf');
+    const spinner = document.getElementById('carteirinhaSpinner');
+    const img = modal.querySelector('.carteirinha-img');
+    
+    if (!modal || !nomeEl || !cpfEl || !spinner || !img) {
+        console.error('Elementos do modal não encontrados');
+        return;
+    }
+    
+    // Atualiza os dados do titular
+    nomeEl.textContent = nome || 'Nome não disponível';
+    cpfEl.textContent = cpf ? `CPF: ${cpf}` : 'CPF não disponível';
+    
+    // Prepara a imagem para carregamento
+    spinner.style.display = 'flex';
+    img.style.display = 'none';
+    modal.style.display = 'flex';
+    
+    // Configura os callbacks de carregamento e erro
+    img.onload = function() {
+        spinner.style.display = 'none';
+        img.style.display = 'block';
+        console.log('Imagem da carteirinha carregada com sucesso');
+    };
+    
+    img.onerror = function() {
+        spinner.style.display = 'none';
+        console.error('Falha ao carregar a imagem da carteirinha');
+        // Pode adicionar uma imagem de fallback ou mensagem aqui
+    };
+    
+    // Força o recarregamento da imagem com um parâmetro único para evitar cache
+    const timestamp = new Date().getTime();
+    img.src = img.src.split('?')[0] + '?t=' + timestamp;
+}
+
+// Configuração do botão de impressão
+const printCarteirinhaBtn = document.getElementById('printCarteirinhaBtn');
+if (printCarteirinhaBtn) {
+    printCarteirinhaBtn.addEventListener('click', function() {
+        // Verifica se a imagem está visível antes de imprimir
+        const img = document.querySelector('#carteirinhaModal .carteirinha-img');
+        if (img && img.style.display !== 'none') {
+            window.print();
+        } else {
+            alert('Aguarde a carteirinha carregar completamente antes de imprimir.');
+        }
+    });
+}
+
+// Event delegation para os botões de ação na tabela de clientes
+if (clientsTableBody) {
+    clientsTableBody.addEventListener('click', function(e) {
+        const cardBtn = e.target.closest('.action-card');
+        if (cardBtn) {
+            const row = cardBtn.closest('tr');
+            const nome = row.cells[1].textContent;
+            const cpf = row.cells[2].textContent;
+            openCarteirinhaModal(nome, cpf);
+        }
+    });
+}
+
+// Fechar modal
+const closeCarteirinhaModal = document.getElementById('closeCarteirinhaModal');
+if (closeCarteirinhaModal) {
+    closeCarteirinhaModal.addEventListener('click', function() {
+        const modal = document.getElementById('carteirinhaModal');
+        if (modal) modal.style.display = 'none';
+    });
+}

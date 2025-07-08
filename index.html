@@ -635,56 +635,27 @@
         </div>
     </div>
     
-    <!-- Modal Card -->
-    <div class="modal" id="cardModal">
-        <div class="modal-content card-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Carteirinha do Cliente</h3>
-                <button class="close-modal" id="closeCardModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="card-container">
-                    <div class="card-header">
-                        <div class="card-logo">MULT SAÚDE</div>
-                        <div class="card-type">PLANO ESSENCIAL</div>
-                    </div>
-                    
-                    <div class="card-user">
-                        <div class="user-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="user-info">
-                            <h3 id="cardUserName">ANTONIO OLIVEIRA DE ALMEIDA</h3>
-                            <p id="cardUserCpf">CPF: 685.537.309-91</p>
-                        </div>
-                    </div>
-                    
-                    <div class="card-details">
-                        <div class="detail-item">
-                            <div class="detail-label">Nº CARTEIRINHA</div>
-                            <div class="detail-value" id="cardNumber">MS-28923-2025</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">VALIDADE</div>
-                            <div class="detail-value">12/2026</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-footer">
-                        <div class="card-actions">
-                            <button class="btn btn-outline" id="shareCardBtn">
-                                <i class="fas fa-share-alt"></i> Compartilhar
-                            </button>
-                            <button class="btn" id="printCardBtn">
-                                <i class="fas fa-print"></i> Imprimir
-                            </button>
-                        </div>
-                    </div>
+    <!-- Modal Carteirinha Titular -->
+    <div class="modal" id="carteirinhaModal">
+        <div class="modal-content carteirinha-modal-content">
+            <span class="close-modal" id="closeCarteirinhaModal">&times;</span>
+            <div class="carteirinha-bg">
+                <div class="carteirinha-spinner" id="carteirinhaSpinner" style="display: none;">
+                    <div class="spinner"></div>
                 </div>
+                <img src="image/carteirinha-titular.jpg" alt="Carteirinha Titular" class="carteirinha-img">
+                <div class="carteirinha-info">
+                    <div class="carteirinha-titular" id="carteirinhaTitularNome"></div>
+                    <div class="carteirinha-cpf" id="carteirinhaTitularCpf"></div>
+                </div>
+            </div>
+            <div class="carteirinha-actions">
+                <button class="btn" id="whatsappShareBtn"><i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp</button>
+                <button class="btn btn-outline" id="printCarteirinhaBtn"><i class="fas fa-print"></i> Imprimir</button>
             </div>
         </div>
     </div>
-
+    
     <!-- Modal Add Task -->
     <div class="modal" id="addTaskModal">
         <div class="modal-content">
