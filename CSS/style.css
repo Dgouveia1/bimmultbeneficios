@@ -1294,4 +1294,10 @@
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+
+@media print {
+  .carteirinha-actions {
+    display: none !important;
+  }
+}
     
