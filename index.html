@@ -880,7 +880,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${client.CPF}</td>
                 <td>${client.Telefone}</td>
                 <td>${client.Plano ?? 'N/A'}</td>
-                <td>${client.Status ?? 'N/A'}</td>
+                <td>${client.Status && client.Status !== 'N/A' ? client.Status : 'Ativo'}</td>
                 <td>
                     <button class="action-btn action-card" data-id="${client.Carteirinha}">Ver Carteira</button>
                 </td>
