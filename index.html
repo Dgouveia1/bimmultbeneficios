@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bim Benefícios - Sistema Interno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <div class.login-logo"><i class="fas fa-heartbeat"></i></div>
+            <h1 class="login-title">Bim Benefícios</h1>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="login-btn">Entrar</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="sidebar" id="sidebar">
+                <div class="logo-container">
+                    <div class="logo-text">Bim Benefícios</div>
+                    <div class="logo-subtitle">Sistema Interno</div>
+                </div>
+                
+                <a href="#" class="menu-item active" data-page="home"><i class="fas fa-home"></i> Dashboard</a>
+                
+                <div class="menu-item"><i class="fas fa-id-card"></i> Cartão Bim</div>
+                <div class="submenu">
+                    <a href="#" class="submenu-item" data-page="clientes">Clientes</a>
+                </div>
+                
+                <div class="menu-item"><i class="fas fa-clinic-medical"></i> Clínica Bim</div>
+                <div class="submenu">
+                    <a href="#" class="submenu-item" data-page="recepcao">Recepção</a>
+                    <a href="#" class="submenu-item" data-page="agenda">Agenda</a>
+                    <a href="#" class="submenu-item" data-page="pacientes">Pacientes</a>
+                    <a href="#" class="submenu-item" data-page="laboratorio">Laboratório</a>
+                </div>
+
+                <div class="admin-only">
+                    <div class="menu-item"><i class="fas fa-cogs"></i> Marketing & Admin</div>
+                    <div class="submenu">
+                        <a href="#" class="submenu-item" data-page="produtos">Produtos</a>
+                        <a href="#" class="submenu-item" data-page="financeiro">Financeiro</a>
+                        <a href="#" class="submenu-item" data-page="disparos">Disparos</a>
+                        <a href="#" class="submenu-item" data-page="status">Status Conexão</a>
+                        <a href="#" class="submenu-item" data-page="usuarios">Usuários</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <button class="btn btn-logout" onclick="logout()">Sair</button>
+                </div>
+            </div>
+
+            <div class="main-content" id="mainContent">
+                
+                <div class="page-content active" id="homePage">
+                    <h2 class="page-title">Dashboard</h2>
+                    </div>
+
+                    <div class="page-content" id="clientesPage">
+                        <div class="clients-page">
+                            <div class="clients-header">
+                                <h2 class="page-title">Clientes</h2>
+                                
+                                <div class="search-container" style="flex-grow: 1; max-width: 400px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="search" id="clientsSearchInput" placeholder="Buscar por nome, CPF ou telefone...">
+                                </div>
+                                
+                                <button class="btn"><i class="fas fa-plus"></i> Novo Cliente</button>
+                                <button class="btn btn-secondary"><i class="fas fa-download"></i> Exportar</button>
+                            </div>
+                            
+                            <div class="clients-table-container">
+                                <div class="table-header">
+                                    <div class="results-info">Mostrando <span id="resultsCount">0</span> de <span id="totalResults">0</span> clientes</div>
+                                </div>
+                                
+                                <div class="card" style="box-shadow: none; border-radius: 0; margin-bottom: 0;">
+                                    <div class="table-container">
+                                        <table id="clientsTable">
+                                             <thead>
+                                                <tr>
+                                                    <th>Nome do Beneficiário</th>
+                                                    <th>CPF</th>
+                                                    <th>Telefone</th>
+                                                    <th>Venc. Parcela</th>
+                                                    <th>Encerra. Plano</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="clientsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-footer">
+                                    <div>Itens por página: 
+                                        <select id="itemsPerPage" style="padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                                            <option>10</option>
+                                            <option selected>25</option>
+                                            <option>50</option>
+                                        </select>
+                                    </div>
+                                    <div class="pagination">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <div class="page-content" id="recepcaoPage">
+                    <div class="content-header">
+                        <h2 class="page-title">Recepção - Fila de Espera</h2>
+                    </div>
+                    <div class="reception-queue" id="receptionQueue">
+                        </div>
+                </div>
+
+                <div class="page-content" id="agendaPage">
+                    <div class="content-header">
+                            <h2 class="page-title">Agenda</h2>
+                            <button class="btn" id="newAppointmentBtn"><i class="fas fa-plus"></i> Novo Agendamento</button>
+                        </div>
+                        <div class="card">
+                            <div class="schedule-container" id="scheduleContainer"></div>
+                        </div>
+                    </div>
+
+                <div class="page-content" id="pacientesPage">
+                    <div class="consulta-coluna" id="filaAtendimento">
+                        <div class="coluna-header"><h3>Aguardando Atendimento</h3></div>
+                        <div class="lista-pacientes-espera">
+                            <div class="paciente-espera-item active"><span class="nome">José Carlos da Silva</span><span class="horario">09:00</span></div>
+                            <div class="paciente-espera-item"><span class="nome">Mariana Costa</span><span class="horario">09:30</span></div>
+                        </div>
+                    </div>
+                    <div class="consulta-coluna" id="infoPaciente">
+                        <div class="paciente-info-header card">
+                            <h4>Informações do Paciente</h4>
+                            <p><strong>Nome:</strong> <span id="currentPatientName">José Carlos da Silva</span></p>
+                            <p><strong>Idade:</strong> <span id="currentPatientAge">42 anos</span></p>
+                        </div>
+                        <div class="coluna-header"><h3>Histórico de Consultas</h3></div>
+                        <div class="historico-consultas">
+                            <div class="historico-item card"><p><strong>Data:</strong> 15/01/2025 - Dr. João</p><p><strong>Conduta:</strong> Solicitado exame de sangue.</p></div>
+                        </div>
+                    </div>
+                    <div class="consulta-coluna" id="areaAtendimento">
+                        <div class="card">
+                            <div class="atendimento-botoes">
+                                <button class="btn btn-secondary active" data-aba="conduta">Conduta</button>
+                                <button class="btn btn-secondary" data-aba="receita">Receita</button>
+                                <button class="btn btn-secondary" data-aba="exames">Exames</button>
+                            </div>
+                            <div class="atendimento-conteudo">
+                                <div class="aba-conteudo active" id="abaConduta">
+                                    <div class="form-group"><label for="queixaPrincipal">Queixa Principal / Anamnese</label><textarea id="queixaPrincipal" rows="4"></textarea></div>
+                                    <div class="form-group"><label for="exameFisico">Exame Físico</label><textarea id="exameFisico" rows="4"></textarea></div>
+                                </div>
+                                <div class="aba-conteudo" id="abaReceita"><div class="form-group"><label for="receituario">Receituário</label><textarea id="receituario" rows="12"></textarea></div></div>
+                                <div class="aba-conteudo" id="abaExames"><div class="form-group"><label for="pedidoExames">Pedidos de Exame</label><textarea id="pedidoExames" rows="12"></textarea></div></div>
+                            </div>
+                            <div class="atendimento-actions"><button class="btn btn-success">Finalizar Consulta</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content" id="laboratorioPage">
+                    <div class="content-header"><h2 class="page-title">Laboratório</h2></div>
+                </div>
+
+                <div class="page-content" id="produtosPage">
+                     <div class="content-header"><h2 class="page-title">Produtos</h2></div>
+                </div>
+
+                <div class="page-content" id="financeiroPage">
+                     <div class="content-header"><h2 class="page-title">Financeiro</h2></div>
+                </div>
+
+                <div class="page-content" id="disparosPage">
+                    <div class="content-header">
+                        <h2 class="page-title">Disparos</h2>
+                    </div>
+                    <div class="card">
+                        <form id="disparoForm">
+                            <!-- <div class="form-group">
+                                <label for="titulo">Título</label>
+                                <input type="text" id="titulo" placeholder="Título da mensagem" required>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="mensagem">Mensagem</label>
+                                <textarea id="mensagem" rows="4" placeholder="Digite sua mensagem..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagem">Imagem (Opcional)</label>
+                                <input type="file" id="imagem" accept="image/*">
+                            </div>
+                            <!-- <div class="form-group"> -->
+                                <!-- <label>Destinatários</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="grupo" value="todos"> Todos os Clientes</label>
+                                    <label><input type="checkbox" name="grupo" value="cartao"> Clientes Cartão Bim</label>
+                                    <label><input type="checkbox" name="grupo" value="clinica"> Clientes Clínica</label>
+                                </div>
+                            </div> -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Enviar Mensagem</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="page-content" id="statusPage">
+                    <div class="content-header"><h2 class="page-title">Status de Conexão WhatsApp</h2></div>
+                    <div class="status-wrapper card">
+                        <div class="status-card-info">
+                            <h3>Status da Instância</h3>
+                            <p>Verifique o status da sua conexão com a API.</p>
+                            <div class="status-display" id="connectionStatus"><span class="status-text">INICIANDO...</span><div class="spinner-small"></div></div>
+                            <button id="disconnectBtn" class="btn btn-danger" style="display: none; margin-top: 20px;"><i class="fas fa-power-off"></i> Desconectar</button>
+                        </div>
+                        <div class="qrcode-container" id="qrcodeContainer" style="display: none;">
+                            <div class="qrcode-output" id="qrcodeOutput"></div>
+                            <p>Escaneie o QR Code com seu WhatsApp.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="page-content" id="usuariosPage">
+                    <div class="content-header"><h2 class="page-title">Gestão de Usuários</h2></div>
+                    <div class="card">
+                        <div class="table-container">
+                           <table id="usersTable"><thead><tr><th>Nome</th><th>Email</th><th>Função</th><th>Status</th><th>Ações</th></tr></thead><tbody id="usersTableBody"></tbody></table>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="appointmentModal">
+        </div>
+    <div class="modal" id="paymentModal">
+        </div>
+
+    <!-- Scripts separados por funcionalidade -->
+    <script src="js/auth.js"></script>
+    <script src="js/usuarios.js"></script>
+    <script src="js/recepcao.js"></script>
+    <script src="js/agenda.js"></script>
+    <script src="js/pacientes.js"></script>
+    <script src="js/clientes.js"></script>
+    <script src="js/laboratorio.js"></script>
+    <script src="js/produtos.js"></script>
+    <script src="js/financeiro.js"></script>
+    <script src="js/disparos.js"></script>
+    <script src="js/whatsapp.js"></script>
+    
+    <script src="js/navigation.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/main.js"></script>
+    
+</body>
+</html>
