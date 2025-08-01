@@ -61,7 +61,7 @@ async function handleDisparoSubmit(event) {
     console.log('🌐 [DISPAROS] Enviando para webhook...');
     // Futuramente, aqui entrará a chamada real para o n8n:
     try {
-        const response = await fetch('https://auto.ia-tess.com.br/webhook-test/mult-disparos', {
+        const response = await fetch('https://webhook.ia-tess.com.br/webhook/mult-disparos', {
             method: 'POST',
             body: formData 
             // Note: Não definimos o Content-Type, o browser faz isso automaticamente para FormData
