@@ -3,931 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bim Beneficios - Sistema interno</title>
+    <title>Bim Benefícios - Sistema Interno</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Login Screen -->
     <div class="login-container" id="loginScreen">
         <div class="login-box">
-            <div class="login-logo">
-                <i class="fas fa-heartbeat"></i>
-            </div>
-            <h1 class="login-title">Bim Beneficios</h1>
-            
+            <div class.login-logo"><i class="fas fa-heartbeat"></i></div>
+            <h1 class="login-title">Bim Benefícios</h1>
             <form id="loginForm">
                 <div class="input-group">
                     <label for="username">Usuário</label>
                     <input type="text" id="username" placeholder="Digite seu usuário" required>
                 </div>
-                
                 <div class="input-group">
                     <label for="password">Senha</label>
                     <input type="password" id="password" placeholder="Digite sua senha" required>
                 </div>
-                
                 <button type="submit" class="login-btn">Entrar</button>
-                
             </form>
         </div>
     </div>
     
-    <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
-        <!-- Mobile Menu Button -->
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- Overlay for sidebar -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        
         <div class="container">
-            <!-- Sidebar -->
             <div class="sidebar" id="sidebar">
                 <div class="logo-container">
-                    <div class="logo-text">Bim Beneficios</div>
-                    <div class="logo-subtitle">Sistema interno</div>
+                    <div class="logo-text">Bim Benefícios</div>
+                    <div class="logo-subtitle">Sistema Interno</div>
                 </div>
                 
-                <div class="menu-section">Home</div>
-                <div class="menu-item active" data-page="home">
-                    <i class="fas fa-home"></i> Dashboard
-                </div>
+                <a href="#" class="menu-item active" data-page="home"><i class="fas fa-home"></i> Dashboard</a>
                 
-                <div class="menu-section">Cartão Bim</div>
-                <div class="menu-item" id="cartaoBim">
-                    <i class="fas fa-id-card"></i> Cartão Bim
-                </div>
-                <div class="submenu" id="cartaoSubmenu">
+                <div class="menu-item"><i class="fas fa-id-card"></i> Cartão Bim</div>
+                <div class="submenu">
                     <a href="#" class="submenu-item" data-page="clientes">Clientes</a>
-                    <a href="#" class="submenu-item" data-page="produtos">Produtos</a>
-                    <a href="#" class="submenu-item" data-page="financeiro">Financeiro</a>
                 </div>
                 
-                <div class="menu-section">Clínica Bim</div>
-                <div class="menu-item">
-                    <i class="fas fa-id-card"></i> Clínica Bim
-                </div>
-                <div class="submenu" id="clinicaSubmenu">
+                <div class="menu-item"><i class="fas fa-clinic-medical"></i> Clínica Bim</div>
+                <div class="submenu">
+                    <a href="#" class="submenu-item" data-page="recepcao">Recepção</a>
                     <a href="#" class="submenu-item" data-page="agenda">Agenda</a>
                     <a href="#" class="submenu-item" data-page="pacientes">Pacientes</a>
-                    <a href="#" class="submenu-item" data-page="laboratorio">Laboratorio</a>
+                    <a href="#" class="submenu-item" data-page="laboratorio">Laboratório</a>
                 </div>
 
-                    <div class="menu-section">Marketing</div>
-                <div class="menu-item">
-                    <i class="fas fa-id-card"></i> Marketing
-                </div>
-                <div class="submenu" id="ferramentasSubmenu">
-                    <a href="#" class="submenu-item" data-page="disparos">Disparos</a>
-                    <a href="#" class="submenu-item" data-page="pacientes">WhatsApp</a>
+                <div class="admin-only">
+                    <div class="menu-item"><i class="fas fa-cogs"></i> Marketing & Admin</div>
+                    <div class="submenu">
+                        <a href="#" class="submenu-item" data-page="produtos">Produtos</a>
+                        <a href="#" class="submenu-item" data-page="financeiro">Financeiro</a>
+                        <a href="#" class="submenu-item" data-page="disparos">Disparos</a>
+                        <a href="#" class="submenu-item" data-page="status">Status Conexão</a>
+                        <a href="#" class="submenu-item" data-page="usuarios">Usuários</a>
+                    </div>
                 </div>
 
                 <div class="sidebar-footer">
                     <button class="btn btn-logout" onclick="logout()">Sair</button>
-                    </div>
                 </div>
+            </div>
 
-            <!-- Main Content -->
             <div class="main-content" id="mainContent">
-                <!-- Home Page -->
+                
                 <div class="page-content active" id="homePage">
+                    <h2 class="page-title">Dashboard</h2>
+                    </div>
+
+                    <div class="page-content" id="clientesPage">
+                        <div class="clients-page">
+                            <div class="clients-header">
+                                <h2 class="page-title">Clientes</h2>
+                                
+                                <div class="search-container" style="flex-grow: 1; max-width: 400px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="search" id="clientsSearchInput" placeholder="Buscar por nome, CPF ou telefone...">
+                                </div>
+                                
+                                <button class="btn"><i class="fas fa-plus"></i> Novo Cliente</button>
+                                <button class="btn btn-secondary"><i class="fas fa-download"></i> Exportar</button>
+                            </div>
+                            
+                            <div class="clients-table-container">
+                                <div class="table-header">
+                                    <div class="results-info">Mostrando <span id="resultsCount">0</span> de <span id="totalResults">0</span> clientes</div>
+                                </div>
+                                
+                                <div class="card" style="box-shadow: none; border-radius: 0; margin-bottom: 0;">
+                                    <div class="table-container">
+                                        <table id="clientsTable">
+                                             <thead>
+                                                <tr>
+                                                    <th>Nome do Beneficiário</th>
+                                                    <th>CPF</th>
+                                                    <th>Telefone</th>
+                                                    <th>Venc. Parcela</th>
+                                                    <th>Encerra. Plano</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="clientsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-footer">
+                                    <div>Itens por página: 
+                                        <select id="itemsPerPage" style="padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                                            <option>10</option>
+                                            <option selected>25</option>
+                                            <option>50</option>
+                                        </select>
+                                    </div>
+                                    <div class="pagination">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <div class="page-content" id="recepcaoPage">
                     <div class="content-header">
-                        <h2 class="page-title">Dashboard</h2>
-                        <div style="display: flex; gap: 15px;">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-download"></i> Relatório
-                            </button>
-                            <button class="btn" id="addTaskBtn">
-                                <i class="fas fa-plus"></i> Nova Tarefa
-                            </button>
+                        <h2 class="page-title">Recepção - Fila de Espera</h2>
+                    </div>
+                    <div class="reception-queue" id="receptionQueue">
+                        </div>
+                </div>
+
+                <div class="page-content" id="agendaPage">
+                    <div class="content-header">
+                            <h2 class="page-title">Agenda</h2>
+                            <button class="btn" id="newAppointmentBtn"><i class="fas fa-plus"></i> Novo Agendamento</button>
+                        </div>
+                        <div class="card">
+                            <div class="schedule-container" id="scheduleContainer"></div>
                         </div>
                     </div>
-                    
-                    <!-- Stats Cards -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="stat-value">1,247</div>
-                            <div class="stat-label">Clientes Ativos</div>
-                        </div>
-                        <div class="stat-card revenue">
-                            <div class="stat-icon">
-                                <i class="fas fa-arrow-up"></i>
-                            </div>
-                            <div class="stat-value">R$ 125.430</div>
-                            <div class="stat-label">Receita Mensal</div>
-                        </div>
-                        <div class="stat-card info">
-                            <div class="stat-icon">
-                                <i class="fas fa-tasks"></i>
-                            </div>
-                            <div class="stat-value">23</div>
-                            <div class="stat-label">Tarefas Pendentes</div>
-                        </div>
-                        <div class="stat-card profit">
-                            <div class="stat-icon">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                            <div class="stat-value">8</div>
-                            <div class="stat-label">Eventos Hoje</div>
+
+                <div class="page-content" id="pacientesPage">
+                    <div class="consulta-coluna" id="filaAtendimento">
+                        <div class="coluna-header"><h3>Aguardando Atendimento</h3></div>
+                        <div class="lista-pacientes-espera">
+                            <div class="paciente-espera-item active"><span class="nome">José Carlos da Silva</span><span class="horario">09:00</span></div>
+                            <div class="paciente-espera-item"><span class="nome">Mariana Costa</span><span class="horario">09:30</span></div>
                         </div>
                     </div>
-                    
-                    <!-- Kanban Board -->
-                    <div class="card">
-                        <h3 style="margin-bottom: 20px; color: var(--secondary-dark);">
-                            <i class="fas fa-tasks"></i> Quadro de Tarefas
-                        </h3>
-                        <div class="kanban-board">
-                            <div class="kanban-column">
-                                <div class="kanban-header">
-                                    <div class="kanban-title">A Fazer</div>
-                                    <div class="kanban-count">5</div>
-                                </div>
-                                <div class="kanban-tasks" id="todoTasks"></div>
-                            </div>
-                            
-                            <div class="kanban-column">
-                                <div class="kanban-header">
-                                    <div class="kanban-title">Em Progresso</div>
-                                    <div class="kanban-count">3</div>
-                                </div>
-                                <div class="kanban-tasks" id="inProgressTasks"></div>
-                            </div>
-                            
-                            <div class="kanban-column">
-                                <div class="kanban-header">
-                                    <div class="kanban-title">Concluído</div>
-                                    <div class="kanban-count">7</div>
-                                </div>
-                                <div class="kanban-tasks" id="completedTasks"></div>
-                            </div>
+                    <div class="consulta-coluna" id="infoPaciente">
+                        <div class="paciente-info-header card">
+                            <h4>Informações do Paciente</h4>
+                            <p><strong>Nome:</strong> <span id="currentPatientName">José Carlos da Silva</span></p>
+                            <p><strong>Idade:</strong> <span id="currentPatientAge">42 anos</span></p>
+                        </div>
+                        <div class="coluna-header"><h3>Histórico de Consultas</h3></div>
+                        <div class="historico-consultas">
+                            <div class="historico-item card"><p><strong>Data:</strong> 15/01/2025 - Dr. João</p><p><strong>Conduta:</strong> Solicitado exame de sangue.</p></div>
                         </div>
                     </div>
-                    
-                    <!-- Calendar -->
-                    <div class="calendar-container">
-                        <div class="calendar-header">
-                            <h3 class="calendar-title">
-                                <i class="fas fa-calendar-alt"></i> Agenda
-                            </h3>
-                            <div class="calendar-nav">
-                                <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                                <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                    <div class="consulta-coluna" id="areaAtendimento">
+                        <div class="card">
+                            <div class="atendimento-botoes">
+                                <button class="btn btn-secondary active" data-aba="conduta">Conduta</button>
+                                <button class="btn btn-secondary" data-aba="receita">Receita</button>
+                                <button class="btn btn-secondary" data-aba="exames">Exames</button>
                             </div>
-                        </div>
-                        
-                        <div class="calendar-view-toggle">
-                            <button class="view-btn active" data-view="month">Mês</button>
-                            <button class="view-btn" data-view="day">Dia</button>
-                        </div>
-                        
-                        <div class="calendar-month-view" id="calendarMonthView">
-                            <div class="calendar-grid" id="calendarGrid"></div>
-                        </div>
-                        
-                        <div class="agenda-day-view" id="agendaDayView">
-                            <h4 style="margin-bottom: 15px; color: var(--secondary-dark);" id="selectedDate">Hoje</h4>
-                            <div class="agenda-events" id="agendaEvents"></div>
+                            <div class="atendimento-conteudo">
+                                <div class="aba-conteudo active" id="abaConduta">
+                                    <div class="form-group"><label for="queixaPrincipal">Queixa Principal / Anamnese</label><textarea id="queixaPrincipal" rows="4"></textarea></div>
+                                    <div class="form-group"><label for="exameFisico">Exame Físico</label><textarea id="exameFisico" rows="4"></textarea></div>
+                                </div>
+                                <div class="aba-conteudo" id="abaReceita"><div class="form-group"><label for="receituario">Receituário</label><textarea id="receituario" rows="12"></textarea></div></div>
+                                <div class="aba-conteudo" id="abaExames"><div class="form-group"><label for="pedidoExames">Pedidos de Exame</label><textarea id="pedidoExames" rows="12"></textarea></div></div>
+                            </div>
+                            <div class="atendimento-actions"><button class="btn btn-success">Finalizar Consulta</button></div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Clients Page -->
-                <div class="page-content" id="clientesPage">
-                    <div class="content-header">
-                        <h2 class="page-title">Clientes</h2>
-                        <button class="btn" id="addClientBtn">
-                            <i class="fas fa-plus"></i> Novo Cliente
-                        </button>
-                    </div>
-                    
-                    <div class="search-container">
-                        <div class="search-box">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" placeholder="Pesquisar cliente..." id="clientSearch">
-                        </div>
-                        <!-- Substitua o select atual por este -->
-                        <select class="filter-select" id="productFilter">
-                            <option value="all">Todos os Planos</option>
-                            <option value="Mult">Mult</option>
-                            <option value="Bim">Bim</option>
-                        </select>
-                        <button class="btn btn-outline">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
-                                </thead>
-                                <tbody id="clientsTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
+
+                <div class="page-content" id="laboratorioPage">
+                    <div class="content-header"><h2 class="page-title">Laboratório</h2></div>
                 </div>
-                
-                <!-- Products Page -->
+
                 <div class="page-content" id="produtosPage">
-                    <div class="content-header">
-                        <h2 class="page-title">Produtos</h2>
-                        <div style="display: flex; gap: 15px;">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-download"></i> Exportar
-                            </button>
-                            <button class="btn" id="addProductBtn">
-                                <i class="fas fa-plus"></i> Novo Produto
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="search-container">
-                        <div class="search-box">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" placeholder="Pesquisar produto..." id="productSearch">
-                        </div>
-                        <select class="filter-select" id="productFilter">
-                            <option value="all">Todos os Produtos</option>
-                            <option value="active">Produtos Ativos</option>
-                            <option value="inactive">Produtos Inativos</option>
-                        </select>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Código</th>
-                                        <th>Produto</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="productsTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
+                     <div class="content-header"><h2 class="page-title">Produtos</h2></div>
                 </div>
 
-
-                    <!-- Disparos Page -->
-    <div class="page-content" id="disparosPage">
-        <div class="content-header">
-            <h2 class="page-title">Disparos de Mensagens</h2>
-        </div>
-        
-        <div class="card">
-            <form id="disparosForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="planoDisparo">Plano</label>
-                        <select id="planoDisparo" class="filter-select">
-                            <option value="todos">Todos</option>
-                            <option value="mult">Mult</option>
-                            <option value="bim">Bim</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sexoDisparo">Sexo</label>
-                        <select id="sexoDisparo" class="filter-select">
-                            <option value="ambos">Ambos</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="sexoDisparo">Status</label>
-                        <select id="sexoDisparo" class="filter-select">
-                            <option value="ambos">Ambos</option>
-                            <option value="M">Ativo</option>
-                            <option value="F">Inativo</option>
-                        </select>
-                    </div>                    
-                    <div class="form-group">
-                        <label for="cidadeDisparo">Cidade</label>
-                        <select id="cidadeDisparo" class="filter-select">
-                            <option value="todas">Todas</option>
-                            <option value="Fernandópolis">Fernandópolis</option>
-                            <!-- Adicione mais cidades conforme necessário -->
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1 0 100%;">
-                        <label for="mensagemDisparo">Mensagem</label>
-                        <textarea 
-                            id="mensagemDisparo" 
-                            rows="5" 
-                            placeholder="Digite a mensagem que será enviada..." 
-                            style="width: 100%; padding: 15px; font-size: 16px; border: 1px solid #ddd; border-radius: 8px;"
-                            required
-                        ></textarea>
-                    </div>
-                </div>
-                
-                <div class="form-actions" style="border-top: none; padding-top: 0;">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-paper-plane"></i> Enviar Mensagem
-                    </button>
-                </div>
-            </form>
-        </div>
-        
-        <div class="card" id="disparoResult" style="display: none;">
-            <h3>Resultado do Disparo</h3>
-            <div id="disparoStatus"></div>
-        </div>
-    </div>
-                
-                <!-- Finance Page -->
                 <div class="page-content" id="financeiroPage">
+                     <div class="content-header"><h2 class="page-title">Financeiro</h2></div>
+                </div>
+
+                <div class="page-content" id="disparosPage">
                     <div class="content-header">
-                        <h2 class="page-title">Financeiro</h2>
-                        <div style="display: flex; gap: 15px;">
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-chart-line"></i> Relatórios
-                            </button>
-                            <button class="btn btn-outline">
-                                <i class="fas fa-download"></i> Exportar
-                            </button>
+                        <h2 class="page-title">Disparos</h2>
+                    </div>
+                    <div class="card">
+                        <form id="disparoForm">
+                            <!-- <div class="form-group">
+                                <label for="titulo">Título</label>
+                                <input type="text" id="titulo" placeholder="Título da mensagem" required>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="mensagem">Mensagem</label>
+                                <textarea id="mensagem" rows="4" placeholder="Digite sua mensagem..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagem">Imagem (Opcional)</label>
+                                <input type="file" id="imagem" accept="image/*">
+                            </div>
+                            <!-- <div class="form-group"> -->
+                                <!-- <label>Destinatários</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="grupo" value="todos"> Todos os Clientes</label>
+                                    <label><input type="checkbox" name="grupo" value="cartao"> Clientes Cartão Bim</label>
+                                    <label><input type="checkbox" name="grupo" value="clinica"> Clientes Clínica</label>
+                                </div>
+                            </div> -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Enviar Mensagem</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="page-content" id="statusPage">
+                    <div class="content-header"><h2 class="page-title">Status de Conexão WhatsApp</h2></div>
+                    <div class="status-wrapper card">
+                        <div class="status-card-info">
+                            <h3>Status da Instância</h3>
+                            <p>Verifique o status da sua conexão com a API.</p>
+                            <div class="status-display" id="connectionStatus"><span class="status-text">INICIANDO...</span><div class="spinner-small"></div></div>
+                            <button id="disconnectBtn" class="btn btn-danger" style="display: none; margin-top: 20px;"><i class="fas fa-power-off"></i> Desconectar</button>
+                        </div>
+                        <div class="qrcode-container" id="qrcodeContainer" style="display: none;">
+                            <div class="qrcode-output" id="qrcodeOutput"></div>
+                            <p>Escaneie o QR Code com seu WhatsApp.</p>
                         </div>
                     </div>
-                    
-                    <!-- Financial Stats -->
-                    <div class="stats-grid">
-                        <div class="stat-card revenue">
-                            <div class="stat-icon">
-                                <i class="fas fa-arrow-up"></i>
-                            </div>
-                            <div class="stat-value">R$ 125.430,50</div>
-                            <div class="stat-label">Receita Total</div>
-                        </div>
-                        <div class="stat-card expenses">
-                            <div class="stat-icon">
-                                <i class="fas fa-arrow-down"></i>
-                            </div>
-                            <div class="stat-value">R$ 78.920,30</div>
-                            <div class="stat-label">Despesas Totais</div>
-                        </div>
-                        <div class="stat-card profit">
-                            <div class="stat-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="stat-value">R$ 46.510,20</div>
-                            <div class="stat-label">Lucro Líquido</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="stat-value">R$ 12.340,80</div>
-                            <div class="stat-label">Pendente</div>
-                        </div>
-                    </div>
-                    
-                    <div class="search-container">
-                        <div class="search-box">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" placeholder="Pesquisar transação..." id="financeSearch">
-                        </div>
-                        <select class="filter-select" id="financeFilter">
-                            <option value="all">Todas as Transações</option>
-                            <option value="receita">Receitas</option>
-                            <option value="despesa">Despesas</option>
-                        </select>
-                        <select class="filter-select" id="statusFilter">
-                            <option value="all">Todos os Status</option>
-                            <option value="pago">Pago</option>
-                            <option value="pendente">Pendente</option>
-                            <option value="atrasado">Atrasado</option>
-                        </select>
-                        <input type="date" class="filter-select" id="dateFilter">
-                    </div>
-                    
+                </div>
+                
+                <div class="page-content" id="usuariosPage">
+                    <div class="content-header"><h2 class="page-title">Gestão de Usuários</h2></div>
                     <div class="card">
                         <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
-                                </thead>
-                                <tbody id="financeTableBody"></tbody>
-                            </table>
+                           <table id="usersTable"><thead><tr><th>Nome</th><th>Email</th><th>Função</th><th>Status</th><th>Ações</th></tr></thead><tbody id="usersTableBody"></tbody></table>
                         </div>
                     </div>
-                </div>
+                </div>  
             </div>
         </div>
     </div>
     
-    <!-- Modal Edit Client -->
-    <div class="modal" id="editClientModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Cliente</h3>
-                <button class="close-modal" id="closeEditClientModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="clientCode">Código</label>
-                        <input type="text" id="clientCode" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="clientId">ID Orig.</label>
-                        <input type="text" id="clientId">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="socialName">Nome Social</label>
-                        <input type="text" id="socialName">
-                    </div>
-                    <div class="form-group">
-                        <label for="fantasyName">Nome Fantasia</label>
-                        <input type="text" id="fantasyName">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cpfCnpj">CPF/CNPJ</label>
-                        <input type="text" id="cpfCnpj">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">Município</label>
-                        <input type="text" id="city">
-                    </div>
-                    <div class="form-group">
-                        <label for="state">UF</label>
-                        <input type="text" id="state">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">Telefone</label>
-                        <input type="text" id="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status">
-                            <option value="active">Ativo</option>
-                            <option value="inactive">Inativo</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-outline" id="cancelEditClient">Cancelar</button>
-                <button class="btn" id="saveClient">Salvar Alterações</button>
-            </div>
+    <div class="modal" id="appointmentModal">
         </div>
-    </div>
+    <div class="modal" id="paymentModal">
+        </div>
+
+    <!-- Scripts separados por funcionalidade -->
+    <script src="js/auth.js"></script>
+    <script src="js/usuarios.js"></script>
+    <script src="js/recepcao.js"></script>
+    <script src="js/agenda.js"></script>
+    <script src="js/pacientes.js"></script>
+    <script src="js/clientes.js"></script>
+    <script src="js/laboratorio.js"></script>
+    <script src="js/produtos.js"></script>
+    <script src="js/financeiro.js"></script>
+    <script src="js/disparos.js"></script>
+    <script src="js/whatsapp.js"></script>
     
-    <!-- Modal Edit Product -->
-    <div class="modal" id="editProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Produto</h3>
-                <button class="close-modal" id="closeEditProductModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productCode">Código</label>
-                        <input type="text" id="productCode" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="productName">Nome do Produto</label>
-                        <input type="text" id="productName">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="unit">Unidade</label>
-                        <select id="unit">
-                            <option value="UN">UN</option>
-                            <option value="Combo">Combo</option>
-                            <option value="Serviço">Serviço</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="grupo">Grupo</label>
-                        <select id="grupo">
-                            <option value="10 - SELO">10 - SELO</option>
-                            <option value="11 - PLANO">11 - PLANO</option>
-                            <option value="12 - TELE">12 - TELE</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="table">Tabela</label>
-                        <input type="text" id="table">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="price">Preço (R$)</label>
-                        <input type="number" id="price" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="cost">Custo (R$)</label>
-                        <input type="number" id="cost" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="productStatus">Status</label>
-                        <select id="productStatus">
-                            <option value="active">Ativo</option>
-                            <option value="inactive">Inativo</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1 0 100%;">
-                        <label for="description">Descrição</label>
-                        <textarea id="description" placeholder="Descrição detalhada do produto..."></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-outline" id="cancelEditProduct">Cancelar</button>
-                <button class="btn" id="saveProduct">Salvar Alterações</button>
-            </div>
-        </div>
-    </div>
+    <script src="js/navigation.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/main.js"></script>
     
-    <!-- Modal Finance -->
-    <div class="modal" id="financeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Informações Financeiras</h3>
-                <button class="close-modal" id="closeFinanceModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="finance-summary">
-                    <div class="finance-card">
-                        <div class="finance-card-title">Total em Aberto</div>
-                        <div class="finance-card-value">R$ 2.450,80</div>
-                    </div>
-                    <div class="finance-card positive">
-                        <div class="finance-card-title">Total Pago</div>
-                        <div class="finance-card-value">R$ 8.720,50</div>
-                    </div>
-                    <div class="finance-card negative">
-                        <div class="finance-card-title">Atrasados</div>
-                        <div class="finance-card-value">R$ 1.230,75</div>
-                    </div>
-                </div>
-                
-                <h4 style="margin-bottom: 15px;">Histórico de Pagamentos</h4>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>Carteirinha</th><th>Nome</th><th>CPF</th><th>Telefone</th><th>Plano</th><th>Status</th><th>Ações</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>15/06/2025</td>
-                                <td>Mensalidade Plano Essencial</td>
-                                <td>R$ 189,90</td>
-                                <td><span class="status status-active">Pago</span></td>
-                            </tr>
-                            <tr>
-                                <td>10/06/2025</td>
-                                <td>Taxa de Adesão</td>
-                                <td>R$ 99,90</td>
-                                <td><span class="status status-active">Pago</span></td>
-                            </tr>
-                            <tr>
-                                <td>05/06/2025</td>
-                                <td>Mensalidade Plano Premium</td>
-                                <td>R$ 289,90</td>
-                                <td><span class="status status-pending">Pendente</span></td>
-                            </tr>
-                            <tr>
-                                <td>01/06/2025</td>
-                                <td>Taxa de Utilização</td>
-                                <td>R$ 49,90</td>
-                                <td><span class="status status-inactive">Atrasado</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Carteirinha Titular -->
-    <div class="modal" id="carteirinhaModal">
-        <div class="modal-content carteirinha-modal-content">
-            <span class="close-modal" id="closeCarteirinhaModal">&times;</span>
-            <div class="carteirinha-bg">
-                <div class="carteirinha-spinner" id="carteirinhaSpinner" style="display: none;">
-                    <div class="spinner"></div>
-                </div>
-                <img src="image/carteirinha-titular.jpg" alt="Carteirinha Titular" class="carteirinha-img">
-                <div class="carteirinha-info">
-                    <div class="carteirinha-titular" id="carteirinhaTitularNome"></div>
-                    <div class="carteirinha-cpf" id="carteirinhaTitularCpf"></div>
-                </div>
-            </div>
-            <div class="carteirinha-actions">
-                <button class="btn" id="whatsappShareBtn"><i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp</button>
-                <button class="btn btn-outline" id="printCarteirinhaBtn"><i class="fas fa-print"></i> Imprimir</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Add Task -->
-    <div class="modal" id="addTaskModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Nova Tarefa</h3>
-                <button class="close-modal" id="closeAddTaskModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="taskTitle">Título da Tarefa</label>
-                        <input type="text" id="taskTitle" placeholder="Digite o título da tarefa">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1 0 100%;">
-                        <label for="taskDescription">Descrição</label>
-                        <textarea id="taskDescription" placeholder="Descrição detalhada da tarefa..."></textarea>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="taskPriority">Prioridade</label>
-                        <select id="taskPriority">
-                            <option value="low">Baixa</option>
-                            <option value="medium">Média</option>
-                            <option value="high">Alta</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="taskDueDate">Data de Vencimento</label>
-                        <input type="date" id="taskDueDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="taskStatus">Status</label>
-                        <select id="taskStatus">
-                            <option value="todo">A Fazer</option>
-                            <option value="inprogress">Em Progresso</option>
-                            <option value="completed">Concluído</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-outline" id="cancelAddTask">Cancelar</button>
-                <button class="btn" id="saveTask">Salvar Tarefa</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Add Client -->
-    <div class="modal" id="newClientModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Novo Cliente</h3>
-                <button class="close-modal" id="closeNewClientModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="newClientForm">
-                    <div class="form-row">
-                        <!-- Nome -->
-                        <div class="form-group">
-                            <label for="nome">Nome</label>
-                            <input type="text" id="nome" name="nome" required>
-                        </div>
-
-                        <!-- Sobrenome -->
-                        <div class="form-group">
-                            <label for="sobrenome">Sobrenome</label>
-                            <input type="text" id="sobrenome" name="sobrenome" required>
-                        </div>
-
-                        <!-- Telefone -->
-                        <div class="form-group">
-                            <label for="telefone">Telefone</label>
-                            <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
-                        </div>
-
-                        <!-- CPF -->
-                        <div class="form-group">
-                            <label for="cpf">CPF</label>
-                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email">
-                        </div>
-
-                        <!-- Data de Nascimento -->
-                        <div class="form-group">
-                            <label for="data_nascimento">Data de Nascimento</label>
-                            <input type="text" id="data_nascimento" name="data_nascimento" placeholder="DD/MM/AAAA" required>
-                        </div>
-
-                        <!-- Sexo (Dropdown) -->
-                        <div class="form-group">
-                            <label for="sexo">Sexo</label>
-                            <select id="sexo" name="sexo" required>
-                                <option value="">Selecione</option>
-                                <option value="M">Masculino (M)</option>
-                                <option value="F">Feminino (F)</option>
-                            </select>
-                        </div>
-
-                        <!-- CEP -->
-                        <div class="form-group">
-                            <label for="cep">CEP</label>
-                            <input type="text" id="cep" name="cep" placeholder="00000-000" required>
-                        </div>
-
-                        <!-- Endereço -->
-                        <div class="form-group">
-                            <label for="endereco">Endereço</label>
-                            <input type="text" id="endereco" name="endereco" required>
-                        </div>
-
-                        <!-- Número -->
-                        <div class="form-group">
-                            <label for="numero">Número</label>
-                            <input type="text" id="numero" name="numero" required>
-                        </div>
-                        <div class="form-group">
-                             <label for="municipio">Município</label>
-                            <input type="text" id="municipio" name="municipio" required>
-                        </div>
-                        <!-- Plano (Dropdown) -->
-                        <div class="form-group">
-                            <label for="plano">Plano</label>
-                            <select id="plano" name="plano" required>
-                                <option value="">Selecione</option>
-                                <option value="Bim">Bim</option>
-                                <option value="Mult">Mult</option>
-                            </select>
-                        </div>
-
-                        <!-- Vendedor (Dropdown) -->
-                        <div class="form-group">
-                            <label for="vendedor">Vendedor</label>
-                            <select id="vendedor" name="vendedor" required>
-                                <option value="">Selecione</option>
-                                <option value="silmara">Silmara</option>
-                                <option value="joaocarlos">João Carlos</option>
-                                <option value="tatiane">Tatiane</option>
-                                <option value="raissa">Raissa</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="dependentesContainer"></div>
-                    <button type="button" id="addDependenteBtn" class="btn btn-secondary btn-small">+ Dependente</button>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-outline" id="cancelNewClient">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/script.js"></script>
-    
-
-
-
-
-
-
-
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // LOGIN + FETCH CLIENTS
-    const loginForm = document.getElementById('loginForm');
-    const loginScreen = document.getElementById('loginScreen');
-    const dashboard = document.getElementById('dashboard');
-    const clientsTableBody = document.getElementById('clientsTableBody');
-    let clientsData = [];
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username === 'admin' && password === 'admin') {
-                loginScreen.style.display = 'none';
-                dashboard.style.display = 'block';
-                await fetchClientsData();
-                populateClientsTable();
-            } else {
-                alert('Usuário ou senha incorretos.');
-            }
-        });
-    }
-
-    async function fetchClientsData() {
-        try {
-            const response = await fetch('https://webhook.ia-tess.com.br/webhook/d5408cf6-3ae5-4e2f-bdb3-bee8882e704d');
-            if (response.ok) {
-                clientsData = await response.json();
-            } else {
-                console.error('Erro ao buscar clientes. Status:', response.status);
-            }
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-        }
-    }
-
-    function populateClientsTable() {
-        clientsTableBody.innerHTML = '';
-        clientsData.forEach(client => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${client.Carteirinha}</td>
-                <td>${client.Nome}</td>
-                <td>${client.CPF}</td>
-                <td>${client.Telefone}</td>
-                <td>${client.Plano ?? 'N/A'}</td>
-                <td>${client.Status && client.Status !== 'N/A' ? client.Status : 'Ativo'}</td>
-                <td>
-                    <button class="action-btn action-card" data-id="${client.Carteirinha}">Ver Carteira</button>
-                </td>
-            `;
-            clientsTableBody.appendChild(row);
-        });
-    }
-
-    // PAGE NAVIGATION
-    const pageContents = document.querySelectorAll('.page-content');
-    const menuItems = document.querySelectorAll('.menu-item[data-page]');
-    const submenuItems = document.querySelectorAll('.submenu-item');
-    const cartaoBim = document.getElementById('cartaoBim');
-    const cartaoSubmenu = document.getElementById('cartaoSubmenu');
-
-    function showPage(pageId) {
-        pageContents.forEach(page => page.classList.remove('active'));
-        const targetPage = document.getElementById(pageId);
-        if (targetPage) targetPage.classList.add('active');
-    }
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', function() {
-            menuItems.forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            const targetPage = this.getAttribute('data-page') + 'Page';
-            showPage(targetPage);
-        });
-    });
-
-    submenuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            submenuItems.forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            const targetPage = this.getAttribute('data-page') + 'Page';
-            showPage(targetPage);
-        });
-    });
-
-    if (cartaoBim && cartaoSubmenu) {
-        cartaoBim.addEventListener('click', function() {
-            cartaoSubmenu.classList.toggle('active');
-        });
-    }
-});
-</script>
-
 </body>
 </html>
