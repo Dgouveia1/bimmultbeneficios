@@ -1,0 +1,805 @@
+{
+  "name": "backend - adminmult",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Selecionamos colunas específicas para não expor o hash da senha\nSELECT id, name, email, role_id, is_active FROM public.users;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1120,
+        2384
+      ],
+      "id": "f7e83c02-daf5-455e-8c6a-1209267bf52e",
+      "name": "Listar Usuários",
+      "credentials": {
+        "postgres": {
+          "id": "6j8H3ZRUGSY2Xquz",
+          "name": "Postgres Supabase Bim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1344,
+        2384
+      ],
+      "id": "2c69e75f-eda3-448e-a062-20b8714f7a30",
+      "name": "Responder /users"
+    },
+    {
+      "parameters": {
+        "operation": "verify",
+        "token": "=\n{{ $json.headers.authorization.split(' ')[1] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jwt",
+      "typeVersion": 1,
+      "position": [
+        304,
+        2624
+      ],
+      "id": "f6b7d21f-4d05-4cb1-9013-f2fa74bdad0b",
+      "name": "Verificar Token JWT",
+      "credentials": {
+        "jwtAuth": {
+          "id": "gtAZ4kH78FchBjYr",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1f632588-e6f4-4839-a77c-bc579a247b69",
+              "leftValue": "={{$json.payload.roleId}}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        2624
+      ],
+      "id": "95af254f-11d7-43f5-9d4d-bfde1acf535f",
+      "name": "Usuário Autorizado?"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        736,
+        2944
+      ],
+      "id": "09394aa1-095e-403a-82b6-32d684dd9d7f",
+      "name": "Responder com Erro 403"
+    },
+    {
+      "parameters": {
+        "useJson": "={{$json.login.payload}}",
+        "claims": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jwt",
+      "typeVersion": 1,
+      "position": [
+        720,
+        1840
+      ],
+      "id": "251ca42a-5d6a-4229-8efb-e71b47890bd6",
+      "name": "Criar Token JWT",
+      "credentials": {
+        "jwtAuth": {
+          "id": "gtAZ4kH78FchBjYr",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "48f97af0-8884-4d5c-b2e8-0aa7bc6f1134",
+              "name": "token",
+              "value": "={{ $json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "b3e8a8de-bbcf-4fb7-a043-c9245bc3dcee",
+              "name": "login.payload.roleId",
+              "value": "={{ $('login1').item.json.login.payload.roleId }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        1840
+      ],
+      "id": "a1bf4b12-589f-41e2-bdfc-3760491a6a4e",
+      "name": "Manter Apenas Token e Role"
+    },
+    {
+      "parameters": {
+        "path": "users",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        2384
+      ],
+      "id": "461b4372-1e84-4bdd-91df-7f4d2aaa99c6",
+      "name": "GET /users",
+      "webhookId": "9b1c53e4-2f0a-4a8b-9e1d-3c7f8a2b5d4e"
+    },
+    {
+      "parameters": {
+        "path": "reception/queue",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        2624
+      ],
+      "id": "24332dfb-ccb3-4e9e-87bf-343e4f03e5cf",
+      "name": "GET /reception/queue",
+      "webhookId": "a1b2c3d4-e5f6-4f7b-8c6a-9e1d0a2b3c4d"
+    },
+    {
+      "parameters": {
+        "path": "appointments",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        2832
+      ],
+      "id": "d5056e52-edd3-4843-9b3d-c66e5c1870af",
+      "name": "GET /appointments",
+      "webhookId": "b1c2d3e4-f5g6-4h7i-j8k9-l0m1n2o3p4q5"
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "output": "={{ $request.path.split('/')[1] }}"
+      },
+      "id": "d9d553a4-ce24-42e9-bb33-27f661a3f0f8",
+      "name": "Switch (por URL)",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        2624
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    a.id,\n    p.name as \"patientName\",\n    to_char(a.start_time, 'HH24:MI') as \"time\",\n    u.name as \"professionalName\",\n    a.status\nFROM \n    public.appointments a\nJOIN \n    public.patients p ON a.patient_id = p.id\nJOIN \n    public.users u ON a.professional_id = u.id\nWHERE \n    a.start_time::date = CURRENT_DATE\nORDER BY \n    a.start_time;",
+        "options": {}
+      },
+      "id": "aec1ada5-544c-4b75-bf78-30a0b00ab882",
+      "name": "Buscar Fila de Hoje",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1120,
+        2624
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "6j8H3ZRUGSY2Xquz",
+          "name": "Postgres Supabase Bim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1344,
+        2624
+      ],
+      "id": "e96903ab-8af8-4786-b86c-f0f3814f304e",
+      "name": "Responder /reception/queue"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM public.appointments;",
+        "options": {}
+      },
+      "id": "a567ccf2-e0de-42e3-bb9b-8d78ba9f5d88",
+      "name": "Listar Agendamentos",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1120,
+        2832
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "6j8H3ZRUGSY2Xquz",
+          "name": "Postgres Supabase Bim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1344,
+        2832
+      ],
+      "id": "9ef1404b-7e2f-4c8b-b0d9-1903ba0c95d0",
+      "name": "Responder /appointments"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "login",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "eadb839e-2234-4ea4-bcaf-e4930f1d6aed",
+      "name": "Webhook (Login)1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        1952
+      ],
+      "webhookId": "f784260d-4f11-4770-9851-bc01481b4712"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2da1c0a0-e374-4b5b-9d48-b4859a22f300",
+              "leftValue": "={{ $json.login.status }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ea39d8bd-8f84-4e22-8d0b-106f0059fc53",
+      "name": "Login com Sucesso?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        1952
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"token\": \"{{$json.token}}\",\n  \"user\": {\n    \"roleId\": \"{{$json.login.payload.roleId}}\"\n  }\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "bc607a11-0ba7-4e83-9f82-228978971ec5",
+      "name": "Responder com Sucesso (Token)1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1120,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.login.status }}",
+        "options": {
+          "responseCode": "={{ $json.login.status }}"
+        }
+      },
+      "id": "cccccc92-4ac8-4144-b55d-955f5dc59cf8",
+      "name": "Responder com Erro1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        720,
+        2080
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT login($1, $2);",
+        "options": {
+          "queryReplacement": "={{$json.body.email}},{{$json.body.password}}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        304,
+        1952
+      ],
+      "id": "99831887-b81d-4fde-a700-061f65d8f812",
+      "name": "login1",
+      "credentials": {
+        "postgres": {
+          "id": "6j8H3ZRUGSY2Xquz",
+          "name": "Postgres Supabase Bim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Status Conexão",
+        "height": 224,
+        "width": 672
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        1248
+      ],
+      "typeVersion": 1,
+      "id": "084dc5c3-3475-4983-bfe1-a7957528fc21",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "instance-connect",
+        "instanceName": "mult"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        304,
+        1328
+      ],
+      "id": "9d291f99-0386-45d4-81eb-c5a4bf721ab9",
+      "name": "Conectar instancia",
+      "credentials": {
+        "evolutionApi": {
+          "id": "A6VoUPW2RxxU2G2n",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "conectar-whats",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        64,
+        1328
+      ],
+      "id": "e69de98e-c96b-4c8f-9c6b-0191831cd278",
+      "name": "Webhook4",
+      "webhookId": "1aa41997-eb80-48d5-abee-59262f720d67"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        496,
+        1328
+      ],
+      "id": "e368b86d-c67f-4979-bcef-e2cdd314d46d",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "content": "# Desconectar Conexão",
+        "height": 224,
+        "width": 672
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        1520
+      ],
+      "typeVersion": 1,
+      "id": "47a921ed-be9e-4e8b-9b48-984e6ae12342",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "desconectar-whats",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        64,
+        1600
+      ],
+      "id": "88ff8c3a-2c08-4ec6-867e-ce06da3fe240",
+      "name": "Webhook5",
+      "webhookId": "1aa41997-eb80-48d5-abee-59262f720d67"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        528,
+        1584
+      ],
+      "id": "18ca8fe6-339d-44f3-af5a-5c54d692069c",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "operation": "logout-instance",
+        "instanceName": "mult"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        304,
+        1600
+      ],
+      "id": "5ca5bfe4-a252-4437-8d68-bbecd6c0d139",
+      "name": "Desconectar instancia",
+      "credentials": {
+        "evolutionApi": {
+          "id": "A6VoUPW2RxxU2G2n",
+          "name": "Evolution account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "GET /users": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.ia-tess.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJteV9maWVsZF8xIjoidmFsdWUgMSIsIm15X2ZpZWxkXzIiOiJ2YWx1ZSAyIiwiaWF0IjoxNzUzNjM5OTAyfQ.gxOrA6ViBtu1FBnSKUMQdBdbW9SGUm-sgTIGGNJTm2M",
+            "content-type": "application/json",
+            "origin": "http://127.0.0.1:3000",
+            "priority": "u=1, i",
+            "referer": "http://127.0.0.1:3000/",
+            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "177.84.61.137",
+            "x-forwarded-host": "webhook.ia-tess.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "bb88c06906d0",
+            "x-real-ip": "177.84.61.137"
+          },
+          "params": {},
+          "query": {},
+          "body": {},
+          "webhookUrl": "https://webhook.ia-tess.com.br/webhook/users",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Listar Usuários": {
+      "main": [
+        [
+          {
+            "node": "Responder /users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Token JWT": {
+      "main": [
+        [
+          {
+            "node": "Usuário Autorizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Usuário Autorizado?": {
+      "main": [
+        [
+          {
+            "node": "Switch (por URL)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder com Erro 403",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Token JWT": {
+      "main": [
+        [
+          {
+            "node": "Manter Apenas Token e Role",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manter Apenas Token e Role": {
+      "main": [
+        [
+          {
+            "node": "Responder com Sucesso (Token)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /users": {
+      "main": [
+        [
+          {
+            "node": "Verificar Token JWT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /reception/queue": {
+      "main": [
+        [
+          {
+            "node": "Verificar Token JWT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /appointments": {
+      "main": [
+        [
+          {
+            "node": "Verificar Token JWT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch (por URL)": {
+      "main": [
+        [
+          {
+            "node": "Listar Usuários",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Fila de Hoje",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Listar Agendamentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Fila de Hoje": {
+      "main": [
+        [
+          {
+            "node": "Responder /reception/queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Agendamentos": {
+      "main": [
+        [
+          {
+            "node": "Responder /appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (Login)1": {
+      "main": [
+        [
+          {
+            "node": "login1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login com Sucesso?1": {
+      "main": [
+        [
+          {
+            "node": "Criar Token JWT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder com Erro1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "login1": {
+      "main": [
+        [
+          {
+            "node": "Login com Sucesso?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conectar instancia": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook4": {
+      "main": [
+        [
+          {
+            "node": "Conectar instancia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook5": {
+      "main": [
+        [
+          {
+            "node": "Desconectar instancia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desconectar instancia": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9ca2770b-957e-4352-9118-c88788adc872",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c3ddc3f9c0296ba6b4f866a7b23ec435b03ef88c617920e14ebb180a53fc6fef"
+  },
+  "id": "EAs6eQZValBqB2qS",
+  "tags": []
+}
