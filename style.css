@@ -1,0 +1,615 @@
+/* =================================================================
+   ARQUIVO CSS UNIFICADO (BUNDLED) - BIM BENEFÍCIOS
+   ================================================================= */
+
+/* * Conteúdo de: base.css 
+ */
+:root {
+    /* Paleta de Cores Médica: Laranja e Azul */
+    --primary-color: #FF8C00; /* Laranja escuro - Cor Principal */
+    --primary-dark: #D2691E; /* Laranja queimado */
+    --primary-light: #FFA500; /* Laranja padrão */
+    --secondary-color: #4682B4; /* Azul aço */
+    --secondary-dark: #1E4D6B; /* Azul marinho mais escuro */
+    --secondary-light: #87CEEB; /* Azul céu */
+    --white: #FFFFFF;
+    --gray-light: #F5F5F5;
+    --gray-medium: #808080;
+    --black: #1A1A1A;
+    --blue-light: #e3f2fd;
+    
+    /* Cores de Status */
+    --confirmed-color: #4CAF50;
+    --pending-color: #FF9800;
+    --cancelled-color: #F44336;
+    --info-color: #2196F3;
+    
+    /* Sombras e Efeitos */
+    --card-shadow: 0 8px 32px rgba(210, 105, 30, 0.15);
+    --hover-shadow: 0 12px 40px rgba(210, 105, 30, 0.25);
+    --sidebar-bg: #1E4D6B;
+    --sidebar-hover: #2C5D7A;
+    --sidebar-width: 280px;
+}
+
+/* Reset e Estilos Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: #F5F5F5; 
+    color: var(--black); 
+    font-family: 'Poppins', sans-serif; 
+    overflow-x: hidden; 
+    height: 100vh; 
+}
+
+.container { 
+    display: flex; 
+    height: 100vh; 
+    width: 100vw; 
+}
+
+.dashboard { 
+    display: none; 
+    width: 100%; 
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+.main-content { 
+    flex: 1; 
+    padding: 30px; 
+    overflow-y: auto; 
+    background: var(--gray-light); 
+    height: 100vh; 
+}
+
+.page-content { 
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out; 
+}
+
+.page-content.active { 
+    display: block; 
+}
+
+#pacientesPage.active { 
+    display: flex; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+}
+
+.content-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 30px; 
+}
+
+.page-title { 
+    font-size: 28px; 
+    color: var(--secondary-dark); 
+}
+
+.form-group { 
+    margin-bottom: 20px; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    color: var(--gray-medium); 
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    font-size: 15px; 
+}
+
+
+/* * Conteúdo de: components/_buttons.css 
+ */
+.btn { 
+    padding: 12px 24px; 
+    background: var(--primary-color); 
+    color: var(--white); 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 14px; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    transition: all 0.3s ease;
+}
+.btn:hover { 
+    background: var(--primary-dark); 
+    transform: translateY(-1px);
+    box-shadow: var(--hover-shadow);
+}
+.btn-secondary { 
+    background: var(--secondary-color); 
+}
+.btn-secondary:hover { 
+    background: var(--secondary-dark); 
+}
+.btn-success { 
+    background: var(--confirmed-color); 
+}
+.btn-success:hover {
+    background: #45a049;
+}
+.btn-logout { 
+    background: #f44336; 
+    width: 100%; 
+}
+.btn-logout:hover { 
+    background: #d32f2f; 
+}
+.action-btn { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    border: none; 
+    transition: all 0.3s ease;
+}
+.action-edit { 
+    background: rgba(70, 130, 180, 0.1); 
+    color: var(--secondary-color); 
+}
+.action-edit:hover { 
+    background: var(--secondary-color); 
+    color: white; 
+    transform: scale(1.1);
+}
+.action-delete { 
+    background: rgba(244, 67, 54, 0.1); 
+    color: var(--cancelled-color); 
+}
+.action-delete:hover { 
+    background: var(--cancelled-color); 
+    color: white; 
+    transform: scale(1.1);
+}
+.atendimento-botoes .btn { 
+    flex: 1; 
+    background: transparent; 
+    color: var(--secondary-color); 
+    border: 1px solid var(--secondary-color); 
+}
+.atendimento-botoes .btn.active, 
+.atendimento-botoes .btn:hover { 
+    background: var(--secondary-color); 
+    color: var(--white); 
+} 
+
+/* * Conteúdo de: components/_cards.css
+ */
+.card { 
+    background: var(--white); 
+    border-radius: 12px; 
+    box-shadow: var(--card-shadow); 
+    padding: 25px; 
+    margin-bottom: 30px; 
+    transition: all 0.3s ease;
+}
+.card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+.patient-card { 
+    background: var(--white); 
+    border-radius: 8px; 
+    box-shadow: var(--card-shadow); 
+    padding: 20px; 
+    transition: all 0.3s ease;
+}
+.patient-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-1px);
+}
+.patient-card-header { 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 15px; 
+    margin-bottom: 15px; 
+}
+.patient-card-header h4 { 
+    font-size: 18px; 
+    color: var(--secondary-dark); 
+}
+.patient-card-header span { 
+    font-size: 14px; 
+    color: var(--primary-color); 
+}
+.patient-card-body p { 
+    font-size: 14px; 
+    color: var(--gray-medium); 
+    margin-bottom: 8px; 
+}
+.patient-card-actions { 
+    display: flex; 
+    gap: 10px; 
+    margin-top: 20px; 
+}
+.paciente-info-header { 
+    padding: 20px; 
+}
+.paciente-info-header h4 { 
+    margin-bottom: 15px; 
+}
+.paciente-info-header p { 
+    font-size: 14px; 
+    margin-bottom: 5px; 
+}
+.historico-item { 
+    padding: 15px; 
+}
+.historico-item p { 
+    font-size: 13px; 
+    margin-bottom: 5px; 
+} 
+
+/* * Conteúdo de: components/_tables.css
+ */
+.table-container { 
+    overflow-x: auto; 
+}
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 22px; 
+}
+th { 
+    background-color: var(--secondary-color); 
+    color: var(--white); 
+    text-align: left; 
+    padding: 16px; 
+}
+td { 
+    padding: 14px 16px; 
+    border-bottom: 1px solid #eee; 
+}
+tr:nth-child(even) { 
+    background-color: var(--gray-light); 
+}
+tr:hover {
+    background-color: rgba(70, 130, 180, 0.05);
+}
+.status { 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    font-weight: 500;
+}
+.status-active { 
+    background: #e8f5e9; 
+    color: var(--confirmed-color); 
+}
+.status-inactive { 
+    background: #ffebee; 
+    color: var(--cancelled-color); 
+}
+.status-pending { 
+    background: #fffde7; 
+    color: var(--pending-color); 
+}
+.actions { 
+    display: flex; 
+    gap: 10px; 
+} 
+
+/* * Conteúdo de: components/_search.css
+ */
+ .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 20px;
+}
+.search-container i {
+    position: absolute;
+    left: 15px;
+    color: var(--gray-medium);
+}
+.search-container input[type="search"] {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 22px;
+    transition: all 0.2s ease-in-out;
+}
+.search-container input[type="search"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+}
+
+/* * Conteúdo de: pages/_login.css
+ */
+.login-container { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    height: 100vh; 
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%); 
+}
+.login-box { 
+    background: var(--white); 
+    border-radius: 15px; 
+    box-shadow: var(--card-shadow); 
+    max-width: 400px; 
+    padding: 40px; 
+    text-align: center; 
+    animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.login-logo { 
+    width: 120px; 
+    height: 120px; 
+    margin: 0 auto 20px; 
+    background-color: var(--primary-light); 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: var(--white); 
+    font-size: 50px; 
+    box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+}
+.login-title { 
+    font-size: 28px; 
+    color: var(--secondary-dark); 
+    margin-bottom: 30px; 
+    font-weight: 600;
+}
+.login-btn { 
+    width: 100%; 
+    padding: 14px; 
+    background: var(--primary-color); 
+    color: var(--white); 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin-top: 10px; 
+    font-weight: 600;
+}
+
+/* * Conteúdo de: pages/_sidebar.css
+ */
+.sidebar { 
+    width: var(--sidebar-width); 
+    background: var(--sidebar-bg); 
+    color: var(--white); 
+    display: flex; 
+    flex-direction: column; 
+    z-index: 1000; 
+    height: 100vh; 
+    overflow-y: auto; 
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+.logo-container { 
+    padding: 30px 20px; 
+    text-align: center; 
+    border-bottom: 1px solid rgba(255,255,255,0.1); 
+}
+.logo-text { 
+    font-size: 24px; 
+    font-weight: 600; 
+}
+.logo-subtitle { 
+    font-size: 11px; 
+    opacity: 0.8; 
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+}
+.menu-item, 
+.submenu-item { 
+    padding: 18px 25px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    border-left: 4px solid transparent; 
+    color: var(--gray-light); 
+    text-decoration: none; 
+    display: block; 
+}
+.menu-item:hover, 
+.menu-item.active { 
+    background: var(--sidebar-hover); 
+    border-left-color: var(--primary-color); 
+    color: var(--white); 
+}
+.submenu { 
+    display: none; 
+    background: rgba(0,0,0,0.1); 
+}
+.submenu.active { 
+    display: block; 
+    animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.submenu-item { 
+    padding-left: 45px; 
+    font-size: 14px; 
+}
+.submenu-item:hover, 
+.submenu-item.active { 
+    border-left-color: var(--primary-light); 
+}
+.sidebar-footer { 
+    margin-top: auto; 
+    padding: 20px; 
+} 
+
+/* * Conteúdo de: pages/_pacientes.css
+ */
+.consulta-coluna { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    height: 100%; 
+}
+#filaAtendimento { 
+    flex: 0 0 280px; 
+    background: var(--white); 
+    border-radius: 12px; 
+    box-shadow: var(--card-shadow); 
+    padding: 15px; 
+}
+.coluna-header { 
+    padding-bottom: 10px; 
+    border-bottom: 1px solid #eee; 
+}
+.coluna-header h3 { 
+    font-size: 18px; 
+    color: var(--secondary-dark); 
+}
+
+/* * Conteúdo de: pages/_status.css
+ */
+.status-wrapper { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 30px; 
+    align-items: flex-start; 
+}
+.status-card-info { 
+    flex: 1; 
+    min-width: 300px; 
+}
+.status-text { 
+    font-size: 18px; 
+    font-weight: 600; 
+}
+.spinner-small { 
+    border: 4px solid #f3f3f3; 
+    border-top: 4px solid var(--secondary-color); 
+    border-radius: 50%; 
+    width: 24px; 
+    height: 24px; 
+    animation: spin 1s linear infinite; 
+}
+@keyframes spin { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
+
+/* * Conteúdo de: pages/_recepcao.css
+ */
+.reception-queue { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px; 
+} 
+
+/* * Conteúdo de: pages/_agenda.css
+ */
+.schedule-container {
+    /* Placeholder */
+} 
+
+/* * Conteúdo de: pages/_disparos.css
+ */
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* * Conteúdo de: pages/_clientes.css
+ */
+ .clients-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.clients-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.clients-table-container {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.table-header, .table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f8fafc;
+    color: #555;
+    font-size: 21px;
+}
+.table-header { border-bottom: 1px solid #e2e8f0; }
+.table-footer { border-top: 1px solid #e2e8f0; }
+.pagination { display: flex; gap: 5px; }
+.pagination-btn {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    cursor: pointer;
+}
+.pagination-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 19px;
+    font-weight: 600;
+}
+.badge-danger { background-color: var(--cancelled-color); color: white; }
+.badge-success { background-color: var(--confirmed-color); color: white; }
